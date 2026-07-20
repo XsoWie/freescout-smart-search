@@ -83,23 +83,13 @@ No FreeScout core files are modified.
 
 ## Installation
 
-1. Extract the archive.
-2. Upload the `SmartSearch` folder to:
+You may [install this module like any other FreeScout module](https://github.com/freescout-helpdesk/freescout/wiki/FreeScout-Modules#2-installing-official-modules).
 
-   `Modules/SmartSearch`
+1. Copy the `SmartSearch` folder into your FreeScout `Modules/` directory (from a release ZIP or this repository).
+2. If you previously used `AdamSmartSearchUI`, deactivate/remove that module first.
+3. Activate **Smart Search** under **Manage → Modules**.
 
-3. If you previously used `AdamSmartSearchUI`, deactivate/remove that module first, then activate **Smart Search**.
-4. Activate the module under **Manage → Modules**.
-5. Rebuild and clear caches:
-
-```bash
-php artisan freescout:module-install smartsearch
-php artisan freescout:build
-php artisan freescout:module-build
-php artisan view:clear
-php artisan cache:clear
-php artisan config:clear
-```
+FreeScout runs migrations, creates the public symlink, and clears caches on activation — no manual `artisan` commands are required for a normal install.
 
 ## Configuration
 
