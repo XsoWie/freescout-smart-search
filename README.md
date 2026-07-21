@@ -1,10 +1,16 @@
 # Smart Search
 
+<p align="center">
+  <img src="Public/img/freescout-smart-search-logo.png" alt="Smart Search logo" width="160">
+</p>
+
 Enhanced search for FreeScout.
 
-**Version:** 1.1.3  
+**Version:** 1.1.5  
 **License:** AGPL-3.0  
 **Repository:** [karrierekick-dev/freescout-smart-search](https://github.com/karrierekick-dev/freescout-smart-search)
+
+![Smart Search screenshot](screenshot.png)
 
 ## Attribution
 
@@ -13,7 +19,7 @@ This module is a further development of the wonderful
 by [AdamCoffeeOverflow](https://github.com/AdamCoffeeOverflow).
 
 Many thanks to Adam for the original module — this fork builds on that foundation
-with additional filters, bulk actions, and UI refinements. License remains AGPL-3.0.
+with additional filters, bulk actions, and UI refinements.
 
 ## Features
 
