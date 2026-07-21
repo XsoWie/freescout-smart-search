@@ -1,0 +1,437 @@
+/* Smart Search – suggest.css */
+/* Inline navbar placement hotfix: align the custom search LI to the navbar height */
+.navbar-nav > li#smartsearch-inline-li,
+.navbar-nav > li.smartsearch-inline {
+  display: flex !important;
+  align-items: center;
+  height: 50px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar-nav > li#smartsearch-inline-li > .smartsearch-inline-form,
+.navbar-nav > li.smartsearch-inline > .smartsearch-inline-form {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Inline (always-visible) topbar search — positioned via JS next to notifications */
+.smartsearch-inline {
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.smartsearch-inline .smartsearch-inline-form {
+  margin: 0 6px;
+  position: relative; /* anchor dropdown to the exact input-group width */
+  display: flex;
+  align-items: center;
+}
+
+.smartsearch-inline .smartsearch-inline-input {
+  width: 210px;
+  transition: box-shadow 140ms ease, opacity 140ms ease;
+  /* input-group overrides border radius; re-apply below with more specific rules */
+  border-radius: 999px;
+}
+
+/* Make the whole search pill fully rounded (both edges), including the button */
+.smartsearch-inline .input-group > .form-control.smartsearch-inline-input {
+  border-top-left-radius: 999px;
+    border-bottom-left-radius: 999px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* With multiple buttons, only round the outer edge of the last one. */
+.smartsearch-inline .input-group-btn > .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.smartsearch-inline .input-group-btn > .btn:not(:last-child) {
+
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.smartsearch-inline .input-group-btn > .btn:last-child {
+  border-top-right-radius: 999px;
+    border-bottom-right-radius: 999px;
+}
+
+/* Keep icon buttons visually consistent (magnifier + ⋮) */
+.smartsearch-inline .input-group-btn > .btn.smartsearch-search-btn,
+.smartsearch-inline .input-group-btn > .btn.smartsearch-more {
+  min-width: 32px;
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+}
+
+
+/* Magnifier is intentionally not a submit affordance.
+   Keep button background identical to ⋮ by applying opacity to the icon only. */
+.smartsearch-inline .input-group-btn > .btn.smartsearch-search-btn i {
+  opacity: 0.7;
+}
+
+.smartsearch-inline .input-group-btn > .btn.smartsearch-search-btn:hover i,
+.smartsearch-inline .input-group-btn > .btn.smartsearch-search-btn:focus i {
+  opacity: 0.85;
+}
+
+.smartsearch-inline .input-group-btn > .btn:focus,
+.smartsearch-inline .input-group-btn > .btn:active {
+  outline: none;
+}
+
+.smartsearch-inline .smartsearch-inline-input:focus {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.18);
+}
+
+/* Suggestions dropdown
+   Rendered as a body-level portal by JS so dashboard/navbar overflow cannot clip it. */
+.smartsearch-inline {
+  position: relative;
+}
+
+.smartsearch-suggest {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18);
+  left: auto;
+  margin-top: 0;
+  max-height: 320px;
+  overflow: auto;
+  padding: 6px 0;
+  position: fixed;
+  right: auto;
+  top: auto;
+  width: 560px;
+  width: var(--smartsearch-suggest-expanded-width, var(--smartsearch-suggest-width, 560px));
+  max-width: calc(100vw - 24px);
+  z-index: 3000;
+}
+
+.smartsearch-suggest-head-wrap {
+  padding: 0 0 2px;
+}
+
+.smartsearch-suggest-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 4px 12px 2px;
+}
+
+.smartsearch-suggest-head {
+  padding: 6px 12px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.smartsearch-suggest-filters {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  margin-left: auto;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #344054;
+  text-align: right;
+}
+
+.smartsearch-suggest-filters-label {
+  flex: 0 0 auto;
+  margin-right: 8px;
+  font-weight: 600;
+  color: #667085;
+}
+
+.smartsearch-suggest-filters-text {
+  min-width: 0;
+  color: #344054;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smartsearch-suggest-reset-filters,
+.smartsearch-suggest-reset-filters:hover,
+.smartsearch-suggest-reset-filters:focus,
+.smartsearch-suggest-reset-filters:active {
+  flex: 0 0 auto;
+  margin-left: 6px;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: #667085;
+  font-size: 18px;
+  line-height: 1;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.smartsearch-suggest-reset-filters:hover,
+.smartsearch-suggest-reset-filters:focus {
+  color: #101828;
+}
+
+.smartsearch-suggest-sep {
+  height: 1px;
+  margin: 6px 0;
+  background: rgba(0,0,0,0.08);
+}
+
+.smartsearch-suggest-item {
+  display: flex;
+  gap: 8px;
+  padding: 7px 12px;
+  text-decoration: none;
+  white-space: normal;
+  overflow: hidden;
+}
+
+.smartsearch-suggest-item:hover,
+.smartsearch-suggest-item:focus,
+.smartsearch-suggest-item.active {
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.smartsearch-suggest-num {
+  opacity: 0.75;
+  flex: 0 0 auto;
+  font-weight: 600;
+}
+
+/* "Search Smart for …" entry (always present when typing) */
+.smartsearch-suggest-searchall .smartsearch-suggest-subj {
+  font-weight: 600;
+}
+
+.smartsearch-suggest-hint {
+  flex: 0 0 auto;
+  opacity: 0.6;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.smartsearch-suggest-subj {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smartsearch-suggest-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.smartsearch-suggest-row1 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.smartsearch-suggest-row1 .smartsearch-suggest-subj {
+  white-space: nowrap;
+}
+
+.smartsearch-suggest-row2 {
+  display: block;
+  margin-top: 1px;
+  font-size: 12px;
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smartsearch-suggest-status {
+  flex: 0 0 auto;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+/* Desktop suggest dialog uses expanded width by default (same as former hover size). */
+@media (min-width: 992px) {
+  .smartsearch-suggest.smartsearch-suggest-expandable .smartsearch-suggest-item {
+    align-items: flex-start;
+  }
+
+  .smartsearch-suggest.smartsearch-suggest-expandable .smartsearch-suggest-row1 .smartsearch-suggest-subj,
+  .smartsearch-suggest.smartsearch-suggest-expandable .smartsearch-suggest-row2 {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
+}
+
+
+/* Highlight matched fragments in suggestions/results (kept subtle and theme-friendly). */
+.smartsearch-hl {
+  background: rgba(255, 235, 59, 0.55);
+  padding: 0 1px;
+  border-radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .smartsearch-hl {
+    background: rgba(255, 235, 59, 0.25);
+  }
+}
+
+body.dark-mode .smartsearch-hl,
+body.theme-dark .smartsearch-hl {
+  background: rgba(255, 235, 59, 0.25);
+}
+
+/* Dark-mode friendliness: prefer system theme, and also support a future body class */
+@media (prefers-color-scheme: dark) {
+  .smartsearch-suggest {
+    background: #2b2f35;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .smartsearch-suggest-item {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .smartsearch-suggest-item:hover,
+  .smartsearch-suggest-item:focus {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+body.dark-mode .smartsearch-suggest,
+body.theme-dark .smartsearch-suggest {
+  background: #2b2f35;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .smartsearch-suggest-filters,
+body.theme-dark .smartsearch-suggest-filters {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+body.dark-mode .smartsearch-suggest-filters-label,
+body.theme-dark .smartsearch-suggest-filters-label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+body.dark-mode .smartsearch-suggest-filters-text,
+body.theme-dark .smartsearch-suggest-filters-text {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body.dark-mode .smartsearch-suggest-reset-filters,
+body.theme-dark .smartsearch-suggest-reset-filters {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+body.dark-mode .smartsearch-suggest-reset-filters:hover,
+body.dark-mode .smartsearch-suggest-reset-filters:focus,
+body.theme-dark .smartsearch-suggest-reset-filters:hover,
+body.theme-dark .smartsearch-suggest-reset-filters:focus {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+body.dark-mode .smartsearch-suggest-item,
+body.theme-dark .smartsearch-suggest-item {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+body.dark-mode .smartsearch-suggest-item:hover,
+body.dark-mode .smartsearch-suggest-item:focus,
+body.theme-dark .smartsearch-suggest-item:hover,
+body.theme-dark .smartsearch-suggest-item:focus {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Tighten on smaller screens */
+@media (max-width: 991px) {
+  /* On tablet/mobile, avoid the cramped "pill". Let it breathe and stay readable. */
+  .smartsearch-inline .smartsearch-inline-form { margin: 8px 10px 0 10px; }
+  .smartsearch-inline .smartsearch-inline-input { width: 100%; }
+  .smartsearch-inline .input-group { width: 100%; }
+
+  /* Suggestions: keep them compact on mobile.
+     Show just the primary line (ID + Subject) and hide secondary/meta details. */
+  .smartsearch-suggest { max-height: 58vh; }
+  .smartsearch-suggest-item { padding: 10px 12px; }
+  .smartsearch-suggest-row2 { display: none; }
+  .smartsearch-suggest-status { display: none; }
+  .smartsearch-suggest-hint { display: none; }
+}
+
+/* Mobile navbar: keep Smart Search visible at the top of the collapsed menu. */
+@media (max-width: 767px) {
+  .navbar-nav > li#smartsearch-inline-li,
+  .navbar-nav > li.smartsearch-inline {
+    clear: both;
+    display: block !important;
+    height: auto;
+    padding: 0 10px;
+    width: 100%;
+  }
+
+  .navbar-nav > li#smartsearch-inline-li > .smartsearch-inline-form,
+  .navbar-nav > li.smartsearch-inline > .smartsearch-inline-form {
+    border: 0;
+    box-shadow: none;
+    margin: 8px 0 10px;
+    padding: 0;
+    width: 100%;
+  }
+
+  .smartsearch-inline .input-group {
+    width: 100%;
+  }
+
+  .smartsearch-suggest.smartsearch-suggest-mobile {
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+    max-height: 42vh;
+    max-width: calc(100vw - 24px);
+    min-width: 0;
+    overflow-x: hidden;
+    z-index: 4000;
+  }
+
+  .smartsearch-suggest.smartsearch-suggest-mobile .smartsearch-suggest-item {
+    align-items: center;
+    min-height: 38px;
+  }
+
+  .smartsearch-suggest.smartsearch-suggest-mobile .smartsearch-suggest-row1 .smartsearch-suggest-subj {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.smartsearch-results-section[hidden] {
+  display: none !important;
+}
+
+.smartsearch-results-meta {
+  margin: 15px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.smartsearch-results-bar .smartsearch-results-meta {
+    margin: 0;
+    flex: 1 1 auto;
+    min-width: 0;

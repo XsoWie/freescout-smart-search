@@ -1,0 +1,387 @@
+/* Smart Search – extras.css */
+
+.smartsearch-preset-load-caret {
+  margin-left: 2px;
+  margin-right: 0 !important;
+  font-size: 9px !important;
+  position: relative;
+  top: -1px;
+}
+
+.smartsearch-preset-save-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: min(420px, 100%);
+  max-width: 100%;
+  margin-left: auto;
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition:
+    grid-template-rows 0.22s ease,
+    opacity 0.18s ease,
+    transform 0.22s ease;
+}
+
+.smartsearch-preset-save-panel.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.smartsearch-preset-save-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.smartsearch-preset-save-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  padding: 2px 0 0;
+  border: 0;
+  background: transparent;
+}
+
+.smartsearch-preset-save-dialog .smartsearch-preset-name {
+  flex: 1 1 auto;
+  min-width: 140px;
+  width: auto;
+}
+
+.smartsearch-preset-save-dialog .smartsearch-preset-save-confirm,
+.smartsearch-preset-save-dialog .smartsearch-preset-save-cancel {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smartsearch-preset-save-panel {
+    transition: none;
+    transform: none;
+  }
+}
+
+.smartsearch-preset-load-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  width: min(360px, calc(100vw - 32px));
+  max-height: 280px;
+  overflow: auto;
+  padding: 6px;
+  margin: 0;
+  border: 1px solid #e4e7ec;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+}
+
+.smartsearch-preset-load-menu[hidden] {
+  display: none !important;
+}
+
+.smartsearch-preset-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.smartsearch-preset-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 6px 8px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #f8fafc;
+  text-align: left;
+}
+
+.smartsearch-preset-item:hover {
+  background: #eef2f6;
+  border-color: #e4e7ec;
+}
+
+.smartsearch-preset-item-body {
+  display: block;
+  min-width: 0;
+  flex: 1 1 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.smartsearch-preset-item-body:hover,
+.smartsearch-preset-item-body:focus {
+  outline: none;
+}
+
+.smartsearch-preset-item-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.smartsearch-preset-item-name {
+  min-width: 0;
+  flex: 1 1 auto;
+  font-size: 13px;
+  font-weight: 600;
+  color: #344054;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smartsearch-preset-item-meta {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-weight: 500;
+  color: #98a2b3;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.smartsearch-preset-item-summary {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: #667085;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smartsearch-preset-item-del {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  margin-top: 1px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #98a2b3;
+  line-height: 28px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.smartsearch-preset-item-del .glyphicon {
+  font-size: 13px;
+  top: 2px;
+}
+
+.smartsearch-preset-item-del:hover,
+.smartsearch-preset-item-del:focus {
+  color: #b42318;
+  background: rgba(180, 35, 24, 0.08);
+  opacity: 1;
+  outline: none;
+}
+
+.smartsearch-preset-empty {
+  margin: 0;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #98a2b3;
+}
+
+.smartsearch-submit {
+flex: 0 0 auto;
+  min-width: 120px;
+height: 44px;
+  border-radius: 8px;
+padding: 0 18px;
+  font-weight: 600;
+}
+
+.smartsearch-more-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 0;
+  text-decoration: none !important;
+  box-shadow: none !important;
+}
+
+.smartsearch-more-toggle:hover,
+.smartsearch-more-toggle:focus,
+.smartsearch-more-toggle:active {
+  text-decoration: none !important;
+}
+
+.smartsearch-more-toggle-caret {
+  font-size: 11px;
+  line-height: 1;
+  transition: transform .28s ease;
+}
+
+.smartsearch-more-toggle[data-expanded="1"] .smartsearch-more-toggle-caret,
+.smartsearch-more-toggle[aria-expanded="true"] .smartsearch-more-toggle-caret {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smartsearch-more-toggle-caret {
+    transition: none;
+  }
+}
+
+.smartsearch-date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.smartsearch-date-row .form-control {
+  width: auto;
+  min-width: 0;
+  flex: 1 1 110px;
+}
+
+.smartsearch-date-sep {
+  color: #98a2b3;
+}
+
+.smartsearch-check-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+}
+
+.smartsearch-check-inline .checkbox-inline {
+  margin: 0;
+  padding-left: 0;
+}
+
+.smartsearch-tags-checks {
+  max-height: 140px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+}
+
+.smartsearch-tags-checks .checkbox {
+  position: relative;
+  display: block;
+  margin: 0;
+  min-width: 140px;
+  min-height: 0;
+  padding-left: 20px;
+}
+
+.smartsearch-tags-checks .checkbox input[type="checkbox"] {
+  position: absolute;
+  margin-left: -20px;
+  margin-top: 3px;
+}
+
+@media (max-width: 991px) {
+  .smartsearch-filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.dark-mode .smartsearch-tile-btn,
+body.theme-dark .smartsearch-tile-btn,
+body.dark-mode .smartsearch-tile-panel,
+body.theme-dark .smartsearch-tile-panel,
+body.dark-mode .smartsearch-cf-row,
+body.theme-dark .smartsearch-cf-row,
+body.dark-mode .smartsearch-cf-value-popover,
+body.theme-dark .smartsearch-cf-value-popover,
+body.dark-mode .smartsearch-cf-value-btn,
+body.theme-dark .smartsearch-cf-value-btn {
+  background: #2b2b2b;
+  border-color: #555;
+}
+
+body.dark-mode .smartsearch-cf-value-btn,
+body.theme-dark .smartsearch-cf-value-btn {
+    color: #ccc;
+}
+
+body.dark-mode .smartsearch-cf-value-trigger-wrap.has-value .smartsearch-cf-value-btn,
+body.theme-dark .smartsearch-cf-value-trigger-wrap.has-value .smartsearch-cf-value-btn {
+    color: #eee;
+}
+
+body.dark-mode .smartsearch-cf-value-chip,
+body.theme-dark .smartsearch-cf-value-chip {
+    background: #1b5e20;
+    color: #c8e6c9;
+}
+
+body.dark-mode .smartsearch-cf-value-chip-x:hover,
+body.dark-mode .smartsearch-cf-value-chip-x:focus,
+body.theme-dark .smartsearch-cf-value-chip-x:hover,
+body.theme-dark .smartsearch-cf-value-chip-x:focus {
+    background: rgba(200, 230, 201, 0.18);
+}
+
+body.dark-mode .smartsearch-tile-value,
+body.theme-dark .smartsearch-tile-value {
+  color: #eee;
+}
+
+body.dark-mode .smartsearch-pill,
+body.theme-dark .smartsearch-pill {
+  background: #1b5e20;
+  color: #c8e6c9;
+}
+
+body.dark-mode .smartsearch-pill-x:hover,
+body.dark-mode .smartsearch-pill-x:focus,
+body.theme-dark .smartsearch-pill-x:hover,
+body.theme-dark .smartsearch-pill-x:focus {
+  background: rgba(200, 230, 201, 0.18);
+}
+
+body.dark-mode .smartsearch-preset-load-menu,
+body.theme-dark .smartsearch-preset-load-menu {
+  background: #2b2b2b;
+  border-color: #555;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .smartsearch-preset-item,
+body.theme-dark .smartsearch-preset-item {
+  background: #333;
+}
+
+body.dark-mode .smartsearch-preset-item:hover,
+body.theme-dark .smartsearch-preset-item:hover {
+  background: #3a3a3a;
+  border-color: #555;
+}
+
+body.dark-mode .smartsearch-preset-item-name,
+body.theme-dark .smartsearch-preset-item-name {
+  color: #eee;
+}
+
+body.dark-mode .smartsearch-preset-item-summary,
+body.theme-dark .smartsearch-preset-item-summary {
+  color: #aaa;
+}
+
+body.dark-mode .smartsearch-preset-item-del:hover,
+body.dark-mode .smartsearch-preset-item-del:focus,
+body.theme-dark .smartsearch-preset-item-del:hover,
+body.theme-dark .smartsearch-preset-item-del:focus {
+  background: rgba(244, 67, 54, 0.15);
+}

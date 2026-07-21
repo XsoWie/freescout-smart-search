@@ -78,81 +78,113 @@
     $val1 = $nonEmptyVals[1] ?? '';
     $isEmptyOp = ($fop === 'empty');
     $isBetween = ($fop === 'between');
+
+    $valueBtnLabels = [];
+    if ($hasRealOptions && in_array($fop, ['is', 'contains_any'], true)) {
+        foreach ($displayOptions as $optKey => $optLabel) {
+            $optValue = ($type === 8) ? (string)$optLabel : (string)$optKey;
+            if (in_array($optValue, $fvals, true)) {
+                $valueBtnLabels[] = (string)$optLabel;
+            }
+        }
+    } elseif (!$isEmptyOp && count($nonEmptyVals)) {
+        if ($isBetween && count($nonEmptyVals) >= 2) {
+            $valueBtnLabels[] = $nonEmptyVals[0].'–'.$nonEmptyVals[1];
+        } else {
+            $valueBtnLabels = $nonEmptyVals;
+        }
+    }
+    $valueBtnText = count($valueBtnLabels)
+        ? implode(' | ', $valueBtnLabels)
+        : __('Choose values…');
 @endphp
 <div class="smartsearch-cf-row" data-index="{{ $index }}" data-type="{{ $type }}">
-    <div class="smartsearch-cf-row-head">
-        <select class="form-control smartsearch-cf-id" name="cf_filters[{{ $index }}][id]">
+    <div class="smartsearch-cf-row-line">
+        <select class="form-control input-sm smartsearch-cf-id" name="cf_filters[{{ $index }}][id]" aria-label="{{ __('Field') }}">
             <option value="0">{{ __('Choose field…') }}</option>
             @foreach (($fields ?? []) as $f)
                 <option value="{{ $f['id'] }}" data-type="{{ (int)($f['type'] ?? 0) }}" @if($fid === (int)$f['id']) selected @endif>{{ $f['name'] }}</option>
             @endforeach
         </select>
-        <button type="button" class="btn btn-default btn-sm smartsearch-cf-remove" title="{{ __('Remove field') }}">&times;</button>
-    </div>
-    <div class="smartsearch-cf-values" @if(!$fid) style="display:none" @endif>
-        @if ($fid)
-            <div class="smartsearch-cf-op-wrap">
-                <label class="smartsearch-cf-op-label">{{ __('Operator') }}</label>
-                <select class="form-control smartsearch-cf-op" name="cf_filters[{{ $index }}][op]">
+
+        <div class="smartsearch-cf-values" @if(!$fid) style="display:none" @endif>
+            @if ($fid)
+                <select class="form-control input-sm smartsearch-cf-op" name="cf_filters[{{ $index }}][op]" aria-label="{{ __('Operator') }}">
                     @foreach ($allowedOps as $opKey)
                         <option value="{{ $opKey }}" @if($fop === $opKey) selected @endif>{{ $opLabels[$opKey] ?? $opKey }}</option>
                     @endforeach
                 </select>
-            </div>
-            <div class="smartsearch-cf-value-ui" @if($isEmptyOp) style="display:none" @endif>
-                @if ($hasRealOptions && in_array($fop, ['is', 'contains_any'], true))
-                    <div class="smartsearch-check-list">
-                        @foreach ($displayOptions as $optKey => $optLabel)
-                            @php
-                                // Type 1 stores option KEYs; type 8 stores comma-separated LABELS.
-                                $optValue = ($type === 8) ? (string)$optLabel : (string)$optKey;
-                            @endphp
-                            <label class="checkbox">
-                                <input type="checkbox" name="cf_filters[{{ $index }}][values][]" value="{{ $optValue }}" @if(in_array($optValue, $fvals, true)) checked @endif>
-                                {{ $optLabel }}
-                            </label>
-                        @endforeach
+
+                <div class="smartsearch-cf-value-trigger-wrap" @if($isEmptyOp) style="display:none" @endif>
+                    <button
+                        type="button"
+                        class="btn btn-default btn-sm smartsearch-cf-value-btn"
+                        aria-expanded="false"
+                        aria-haspopup="dialog"
+                    >
+                        <span class="smartsearch-cf-value-btn-label">{{ $valueBtnText }}</span>
+                        <span class="smartsearch-cf-value-btn-caret glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                    </button>
+                    <div class="smartsearch-cf-value-popover" hidden>
+                        <div class="smartsearch-cf-value-ui">
+                            @if ($hasRealOptions && in_array($fop, ['is', 'contains_any'], true))
+                                <div class="smartsearch-check-list">
+                                    @foreach ($displayOptions as $optKey => $optLabel)
+                                        @php
+                                            // Type 1 stores option KEYs; type 8 stores comma-separated LABELS.
+                                            $optValue = ($type === 8) ? (string)$optLabel : (string)$optKey;
+                                        @endphp
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="cf_filters[{{ $index }}][values][]" value="{{ $optValue }}" @if(in_array($optValue, $fvals, true)) checked @endif>
+                                            {{ $optLabel }}
+                                        </label>
+                                    @endforeach
+                                </div>
+                            @elseif ($type === 4)
+                                @if ($isBetween)
+                                    <div class="smartsearch-cf-between">
+                                        <input type="number" step="any" class="form-control input-sm" name="cf_filters[{{ $index }}][values][]" placeholder="{{ __('From') }}" value="{{ $val0 }}">
+                                        <span class="smartsearch-cf-between-sep">–</span>
+                                        <input type="number" step="any" class="form-control input-sm" name="cf_filters[{{ $index }}][values][]" placeholder="{{ __('To') }}" value="{{ $val1 }}">
+                                    </div>
+                                @else
+                                    <input type="number" step="any" class="form-control input-sm" name="cf_filters[{{ $index }}][values][]" placeholder="{{ __('Value') }}" value="{{ $val0 }}">
+                                @endif
+                            @elseif ($type === 5)
+                                @if ($isBetween)
+                                    <div class="smartsearch-cf-between">
+                                        <input type="date" class="form-control input-sm" name="cf_filters[{{ $index }}][values][]" value="{{ $val0 }}">
+                                        <span class="smartsearch-cf-between-sep">–</span>
+                                        <input type="date" class="form-control input-sm" name="cf_filters[{{ $index }}][values][]" value="{{ $val1 }}">
+                                    </div>
+                                @else
+                                    <input type="date" class="form-control input-sm" name="cf_filters[{{ $index }}][values][]" value="{{ $val0 }}">
+                                @endif
+                            @elseif ($type === 7)
+                                <input
+                                    type="text"
+                                    class="form-control input-sm"
+                                    name="cf_filters[{{ $index }}][values][]"
+                                    placeholder="{{ __('Value1, Value2…') }}"
+                                    value="{{ implode(', ', $nonEmptyVals) }}"
+                                >
+                                <p class="help-block">{{ __('Enter one or more values separated by commas (OR). Leave empty to match any value / use the query.') }}</p>
+                            @else
+                                {{-- Types 2/3 text (and fallback) --}}
+                                <input
+                                    type="text"
+                                    class="form-control input-sm"
+                                    name="cf_filters[{{ $index }}][values][]"
+                                    placeholder="{{ __('Value') }}"
+                                    value="{{ $val0 }}"
+                                >
+                            @endif
+                        </div>
                     </div>
-                @elseif ($type === 4)
-                    @if ($isBetween)
-                        <div class="smartsearch-cf-between">
-                            <input type="number" step="any" class="form-control" name="cf_filters[{{ $index }}][values][]" placeholder="{{ __('From') }}" value="{{ $val0 }}">
-                            <span class="smartsearch-cf-between-sep">–</span>
-                            <input type="number" step="any" class="form-control" name="cf_filters[{{ $index }}][values][]" placeholder="{{ __('To') }}" value="{{ $val1 }}">
-                        </div>
-                    @else
-                        <input type="number" step="any" class="form-control" name="cf_filters[{{ $index }}][values][]" placeholder="{{ __('Value') }}" value="{{ $val0 }}">
-                    @endif
-                @elseif ($type === 5)
-                    @if ($isBetween)
-                        <div class="smartsearch-cf-between">
-                            <input type="date" class="form-control" name="cf_filters[{{ $index }}][values][]" value="{{ $val0 }}">
-                            <span class="smartsearch-cf-between-sep">–</span>
-                            <input type="date" class="form-control" name="cf_filters[{{ $index }}][values][]" value="{{ $val1 }}">
-                        </div>
-                    @else
-                        <input type="date" class="form-control" name="cf_filters[{{ $index }}][values][]" value="{{ $val0 }}">
-                    @endif
-                @elseif ($type === 7)
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="cf_filters[{{ $index }}][values][]"
-                        placeholder="{{ __('Value1, Value2…') }}"
-                        value="{{ implode(', ', $nonEmptyVals) }}"
-                    >
-                    <p class="help-block">{{ __('Enter one or more values separated by commas (OR). Leave empty to match any value / use the query.') }}</p>
-                @else
-                    {{-- Types 2/3 text (and fallback) --}}
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="cf_filters[{{ $index }}][values][]"
-                        placeholder="{{ __('Value') }}"
-                        value="{{ $val0 }}"
-                    >
-                @endif
-            </div>
-        @endif
+                </div>
+            @endif
+        </div>
+
+        <button type="button" class="btn btn-default btn-sm smartsearch-cf-remove" title="{{ __('Remove field') }}">&times;</button>
     </div>
 </div>

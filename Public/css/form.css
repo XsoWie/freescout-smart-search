@@ -1,0 +1,386 @@
+/* Smart Search – form.css */
+    padding-top: 4px;
+}
+
+.smartsearch-results-bar {
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: space-between;
+    margin: 8px 0 12px;
+    padding: 10px 12px;
+}
+
+.smartsearch-col-conversation { width: 180px; }
+.smartsearch-col-field { width: 220px; }
+.smartsearch-col-status { width: 120px; }
+
+.smartsearch-bulk-toolbar {
+align-items: center;
+  display: flex;
+flex: 0 1 auto;
+  flex-wrap: wrap;
+gap: 6px 8px;
+    justify-content: flex-end;
+    margin: 0;
+}
+
+.smartsearch-bulk-toolbar .checkbox-inline {
+margin: 0;
+  padding-top: 4px;
+}
+
+.smartsearch-bulk-toolbar .form-control.input-sm {
+  display: inline-block;
+max-width: 220px;
+  width: auto;
+}
+
+.smartsearch-bulk-action {
+  min-width: 160px;
+}
+
+.smartsearch-bulk-target {
+  display: none;
+}
+
+.smartsearch-bulk-target-note {
+flex: 1 1 220px;
+    max-width: 360px !important;
+    min-width: 180px;
+}
+
+.smartsearch-bulk-count {
+  line-height: 30px;
+  white-space: nowrap;
+}
+
+.smartsearch-col-check {
+  text-align: center;
+  width: 36px;
+}
+
+.smartsearch-col-check input[type="checkbox"] {
+  margin: 0;
+}
+
+.smartsearch-results-panel {
+    background: #fff;
+    border: 1px solid #d9e2ec;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+.smartsearch-results-wrap {
+  border: 0;
+  margin-bottom: 0;
+  overflow-x: auto;
+}
+
+.smartsearch-results-table {
+  margin-bottom: 0;
+  min-width: 720px;
+}
+
+.smartsearch-results-table>thead>tr>th,
+.smartsearch-results-table>tbody>tr>td {
+    border-top-color: #eef2f6;
+}
+
+.smartsearch-results-table>thead>tr>th {
+    border-bottom: 1px solid #e3e8ef;
+}
+
+body.dark-mode .smartsearch-results-bar,
+body.theme-dark .smartsearch-results-bar,
+body.dark-mode .smartsearch-results-panel,
+body.theme-dark .smartsearch-results-panel {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+@media (max-width: 767px) {
+.smartsearch-results-bar {
+        align-items: stretch;
+        display: block;
+        padding: 10px;
+        }
+
+                                                                                                                                                                                                                                                                .smartsearch-results-bar .smartsearch-results-meta {
+                                                                                                                                                                                                                                                                    margin-bottom: 8px;
+                                                                                                                                                                                                                                                                    padding-top: 0;
+                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                .smartsearch-bulk-toolbar {
+                                                                                                                                                                                                                                                                    display: block;
+                                                                                                                                                                                                                                                                }
+                                                                                                                                
+                                                                                                                                                                                                                                                                .smartsearch-bulk-toolbar>* {
+                                                                                                                                                                                                                                                                    display: block;
+                                                                                                                                                                                                                                                                    margin: 0 0 6px;
+    max-width: none !important;
+    width: 100%;
+  }
+
+  .smartsearch-bulk-toolbar .btn {
+    width: 100%;
+  }
+
+  .smartsearch-bulk-target-note {
+    min-width: 0;
+  }
+
+  .smartsearch-results-table {
+    font-size: 13px;
+    min-width: 680px;
+  }
+}
+
+/* Multi-selects: Bootstrap .form-control height otherwise clips to one row */
+.smartsearch-page select.form-control.smartsearch-multi,
+.smartsearch-page select.form-control[multiple] {
+  height: auto;
+  min-height: 7.5em;
+  padding: 6px 8px;
+}
+
+.smartsearch-field-values-box {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background: #fff;
+  padding: 8px 10px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.smartsearch-field-values-checks .checkbox {
+  display: block;
+  margin: 0 0 6px 0;
+  min-height: 0;
+}
+
+.smartsearch-field-values-checks .checkbox:last-child {
+  margin-bottom: 0;
+}
+
+body.dark-mode .smartsearch-field-values-box,
+body.theme-dark .smartsearch-field-values-box {
+  background: #2b2b2b;
+  border-color: #555;
+}
+
+.smartsearch-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin: 14px 0 0;
+}
+
+.smartsearch-pager-meta {
+  font-size: 13px;
+}
+
+.smartsearch-pager-sep {
+  margin: 0 4px;
+}
+
+.smartsearch-pagination.btn-group {
+  margin: 0;
+}
+/* ===== Smart Search form card (tile UI) ===== */
+.smartsearch-page {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 48px;
+}
+.smartsearch-page .smartsearch-panel {
+  position: relative;
+  z-index: 40;
+  overflow: visible;
+  border-radius: 10px;
+  border-color: #e3e6ea;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+}
+
+.smartsearch-page .smartsearch-panel > .panel-body {
+  overflow: visible;
+}
+
+.smartsearch-card {
+  max-width: 100%;
+  overflow: visible;
+}
+
+.smartsearch-query-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #667085;
+  margin-bottom: 6px;
+}
+
+.smartsearch-query-input-wrap {
+    display: flex;
+    align-items: stretch;
+    gap: 10px;
+}
+.smartsearch-query-input {
+flex: 1 1 auto;
+    min-width: 0;
+  height: 44px;
+  border-radius: 8px;
+  border-color: #d0d5dd;
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.smartsearch-query-input:focus {
+  border-color: #2f80ed;
+  box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.15);
+}
+
+.smartsearch-tip {
+  margin: 8px 0 16px;
+  color: #98a2b3;
+  font-size: 12px;
+}
+
+.smartsearch-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+margin-top: 8px;
+  overflow: visible;
+}
+
+/* Below 1200px: Custom Fields on its own full-width row under Mailbox/Status */
+.smartsearch-filter-grid > .smartsearch-tile-cf {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1200px) {
+  .smartsearch-filter-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .smartsearch-filter-grid > .smartsearch-tile-cf {
+    grid-column: auto;
+  }
+}
+
+.smartsearch-tile {
+  position: relative;
+  z-index: 1;
+}
+
+.smartsearch-tile.is-open {
+  z-index: 10060;
+}
+
+.smartsearch-more-wrap {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows .32s ease, opacity .28s ease, margin .32s ease;
+  margin-top: 10px;
+}
+
+.smartsearch-more-wrap.is-collapsed {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  margin-top: 0;
+  pointer-events: none;
+}
+
+.smartsearch-more-anim {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.smartsearch-more-grid {
+  margin-bottom: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.smartsearch-more-wrap.is-collapsed .smartsearch-tile-panel {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smartsearch-more-wrap {
+    transition: none;
+  }
+}
+
+.smartsearch-tile-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e4e7ec;
+    border-radius: 10px;
+  padding: 10px 12px;
+  min-height: 58px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.smartsearch-tile-btn:hover,
+.smartsearch-tile.is-open .smartsearch-tile-btn {
+  border-color: #2f80ed;
+  box-shadow: 0 0 0 3px rgba(47, 128, 237, 0.12);
+}
+
+.smartsearch-tile-icon {
+  color: #98a2b3;
+  font-size: 14px;
+  width: 18px;
+  text-align: center;
+}
+
+.smartsearch-tile-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.smartsearch-tile-label {
+  display: block;
+  font-size: 11px;
+  color: #98a2b3;
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+
+.smartsearch-tile-value {
+  display: block;
+  font-size: 13px;
+  color: #344054;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.smartsearch-cf-summary {
+  white-space: normal;
+}
+
+.smartsearch-tile-caret {
+  color: #98a2b3;
+  font-size: 11px;
+}
+
+.smartsearch-muted {
+  color: #98a2b3;
+  font-weight: 400;
+}
+
+.smartsearch-pill {
+  display: inline-flex;
