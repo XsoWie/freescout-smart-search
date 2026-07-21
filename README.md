@@ -2,7 +2,7 @@
 
 Enhanced unified conversation search for FreeScout.
 
-**Version:** 1.1.2  
+**Version:** 1.1.3  
 **License:** AGPL-3.0  
 **Repository:** [karrierekick-dev/freescout-smart-search](https://github.com/karrierekick-dev/freescout-smart-search)
 
