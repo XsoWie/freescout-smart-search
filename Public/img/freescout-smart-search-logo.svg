@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">FreeScout Smart Search</title>
+  <desc id="desc">Modern module logo with a magnifying glass, stylized search results, and a smart sparkle.</desc>
+  <defs>
+    <linearGradient id="bg" x1="42" y1="28" x2="470" y2="492" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F8FBFE"/>
+      <stop offset="1" stop-color="#EAF4FB"/>
+    </linearGradient>
+    <linearGradient id="lens" x1="145" y1="95" x2="316" y2="286" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#E7F3FB"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="168" y1="122" x2="306" y2="255" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1485D4"/>
+      <stop offset="1" stop-color="#0568B5"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#154E78" flood-opacity="0.16"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#154E78" flood-opacity="0.16"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" fill="#EAF4FB"/>
+  <rect x="10" y="10" width="492" height="492" rx="34" fill="url(#bg)" stroke="#D6E8F4" stroke-width="2"/>
+  <circle cx="65" cy="61" r="92" fill="#D9ECF8" opacity="0.65"/>
+  <circle cx="460" cy="111" r="57" fill="#D3EAF8" opacity="0.52"/>
+  <path d="M385 467C438 434 476 391 503 338V512H338C354 496 370 481 385 467Z" fill="#DCEEF9" opacity="0.72"/>
+
+  <g filter="url(#shadow)">
+    <circle cx="229" cy="190" r="112" fill="url(#lens)"/>
+    <circle cx="229" cy="190" r="112" fill="none" stroke="#185886" stroke-width="22"/>
+    <path d="M305 268L377 340" fill="none" stroke="#185886" stroke-width="31" stroke-linecap="round"/>
+    <path d="M319 282L377 340" fill="none" stroke="#0A73C4" stroke-width="21" stroke-linecap="round"/>
+  </g>
+
+  <!-- Stylized S made of search-result cards -->
+  <g filter="url(#softShadow)">
+    <rect x="153" y="128" width="146" height="52" rx="19" fill="#FFFFFF" stroke="#C5DFEF" stroke-width="3"/>
+    <rect x="159" y="200" width="146" height="52" rx="19" fill="#FFFFFF" stroke="#C5DFEF" stroke-width="3"/>
+  </g>
+  <rect x="168" y="143" width="38" height="22" rx="7" fill="url(#accent)"/>
+  <rect x="218" y="143" width="61" height="7" rx="3.5" fill="#6FA6C8"/>
+  <rect x="218" y="156" width="42" height="7" rx="3.5" fill="#A7C8DD"/>
+  <rect x="252" y="215" width="38" height="22" rx="7" fill="url(#accent)"/>
+  <rect x="178" y="215" width="61" height="7" rx="3.5" fill="#6FA6C8"/>
+  <rect x="197" y="228" width="42" height="7" rx="3.5" fill="#A7C8DD"/>
+  <path d="M209 181C238 181 250 190 250 200" fill="none" stroke="#1485D4" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Smart sparkle -->
+  <g fill="#1485D4">
+    <path d="M352 91C358 111 366 119 386 125C366 131 358 139 352 159C346 139 338 131 318 125C338 119 346 111 352 91Z"/>
+    <path d="M395 140C398 151 403 156 414 159C403 162 398 167 395 178C392 167 387 162 376 159C387 156 392 151 395 140Z" opacity="0.9"/>
+  </g>
+
+  <text x="256" y="388" text-anchor="middle" fill="#185886" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="36" font-weight="650" letter-spacing="0.2">FreeScout</text>
+  <text x="256" y="432" text-anchor="middle" fill="#0A73C4" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="34" font-weight="760" letter-spacing="0.3">Smart Search</text>
+  <rect x="203" y="454" width="106" height="5" rx="2.5" fill="#B9D8EA"/>
+</svg>
