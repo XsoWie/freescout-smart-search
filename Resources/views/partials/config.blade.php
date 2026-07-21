@@ -1,20 +1,11 @@
 {{--
   Tiny, CSP-safe config node.
-  JS reads these to stay subdirectory-safe and to respect module settings.
+  JS reads these to stay subdirectory-safe and to pick up module config defaults.
 --}}
 @php
-    $ssDefaultStatuses = \Option::get(
-        'smartsearch.default_statuses',
-        (array)config('smartsearch.default_statuses', [1, 2])
-    );
-    if (!is_array($ssDefaultStatuses)) {
-        $ssDefaultStatuses = [$ssDefaultStatuses];
-    }
+    $ssDefaultStatuses = (array)config('smartsearch.default_statuses', [1, 2]);
     $ssDefaultStatuses = array_values(array_map('intval', $ssDefaultStatuses));
-    $ssDefaultMailboxId = (int)\Option::get(
-        'smartsearch.default_mailbox_id',
-        (int)config('smartsearch.default_mailbox_id', 0)
-    );
+    $ssDefaultMailboxId = (int)config('smartsearch.default_mailbox_id', 0);
     $ssStatusLabels = [];
     try {
         if (class_exists(\App\Conversation::class) && property_exists(\App\Conversation::class, 'statuses') && is_array(\App\Conversation::$statuses)) {

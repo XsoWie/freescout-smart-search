@@ -152,7 +152,7 @@ trait ParsesBasicFilters
      *
      * @return array{0:string,1:string}
      */
-    protected function resolveDatePreset($preset, Carbon $now = null)
+    protected function resolveDatePreset($preset, $now = null)
     {
         $preset = strtolower(trim((string)$preset));
         if ($preset === '' || !in_array($preset, $this->datePresetKeys(), true)) {
@@ -494,20 +494,14 @@ trait ParsesBasicFilters
     }
 
     /**
-     * Default statuses from Manage → Settings → Smart Search.
+     * Default statuses from Config/config.php.
      *
      * @param array $statusOptions
      * @return int[]
      */
     protected function getDefaultStatusesSetting(array $statusOptions)
     {
-        $raw = \Option::get(
-            'smartsearch.default_statuses',
-            (array)config('smartsearch.default_statuses', [1, 2])
-        );
-        if (!is_array($raw)) {
-            $raw = [$raw];
-        }
+        $raw = (array)config('smartsearch.default_statuses', [1, 2]);
 
         $out = [];
         foreach ($raw as $value) {
@@ -521,14 +515,11 @@ trait ParsesBasicFilters
     }
 
     /**
-     * Default mailbox from Manage → Settings → Smart Search.
+     * Default mailbox from Config/config.php.
      */
     protected function getDefaultMailboxIdSetting()
     {
-        return (int)\Option::get(
-            'smartsearch.default_mailbox_id',
-            (int)config('smartsearch.default_mailbox_id', 0)
-        );
+        return (int)config('smartsearch.default_mailbox_id', 0);
     }
 
     /**
@@ -536,11 +527,6 @@ trait ParsesBasicFilters
      */
     protected function shouldSearchThreadBody()
     {
-        $value = \Option::get(
-            'smartsearch.search_thread_body',
-            config('smartsearch.search_thread_body', true)
-        );
-
-        return (bool)$value;
+        return (bool)config('smartsearch.search_thread_body', true);
     }
 }

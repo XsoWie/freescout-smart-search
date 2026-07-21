@@ -2,7 +2,7 @@
 
 Enhanced unified conversation search for FreeScout.
 
-**Version:** 1.1.0  
+**Version:** 1.1.1  
 **License:** AGPL-3.0  
 **Repository:** [karrierekick-dev/freescout-smart-search](https://github.com/karrierekick-dev/freescout-smart-search)
 
@@ -19,49 +19,44 @@ with additional filters, bulk actions, and UI refinements. License remains AGPL-
 
 ### Search
 
-- Always-visible navbar search with permission-safe suggestions
-- Dedicated Smart Search page (opens idle — search only after submit)
-- Subject, preview, customer email, customer name, phone, message, reply, and internal-note search
+- Navbar search with suggestions and recent searches
+- Subject, preview, message, reply, and internal-note search; with all search-in scopes selected also customer email, name, and phone
 - Exact numeric resolution:
   - `#1234` prefers FreeScout's display conversation number
   - `1234` prefers the internal conversation ID
-  - thread ID lookup remains available as a fallback
-  - failed numeric lookups continue into normal text search
-- Filters: mailbox, **multi-status (OR)** incl. Deleted, assignee (primary), folder, advanced filters
-- Sorting via results table headers (`#`, Created, Updated, active custom-field columns)
-- Advanced filters (collapsible): date range (relative presets + custom), tags, customer, attachments, search-in scopes, waiting for reply
-- Relative date presets: Today, Yesterday, Last 7/30 days, This month, Last month (resolved server-side for SQL)
-- **Defaults** button restores Manage → Settings defaults (not an empty form); Quick Search shows a filter summary only when filters differ from defaults
-- **Manage → Settings → Smart Search:** default statuses, default mailbox, toggle “search message bodies”
-- **Localization:** FreeScout JSON style (`Resources/lang/de.json`, `fr.json`); English source keys via `__()` / `__j()`
-- Deleted conversations use `conversation.state` and display a red **Deleted** badge
+- Filters: mailbox, multi-status (OR) incl. Deleted, multi-assignee (OR) incl. Unassigned, folder, advanced filters under “more options”
+- Sortable results (`#`, Created, Updated, custom-field columns)
+- Advanced filters: date basis (Created or Updated), relative or custom date range (Today, Yesterday, Last 7/30 days, This/Last month), customer, attachments, search-in scopes, waiting for reply; tags when the Tags module is available
+- Save / load / delete filter presets (per user)
+- Defaults button (module config baselines); Quick Search filter summary when filters differ from defaults
+- Localization: en, fr, de
 
 ### Custom Fields (optional module)
 
 Shown only when the **Custom Fields** module is installed and active:
 
-- Always-visible **Custom Fields** tile (same row as Mailbox/Status from 1200px width)
-- Multiple field filters combined with **AND**; values within a field use **OR**
-- **Type-aware operators and inputs:**
+- Custom Fields tile
+- Multiple field filters (AND); values within a field (OR)
+- Operators by type:
   - Single line text: is / contains / empty
   - Multi line: contains / empty
   - Number: equals / greater than / less than / between / empty
   - Date: on / before / after / between / empty
-  - Dropdown: is (option checkboxes) / empty
+  - Dropdown: is / empty
   - Tags: contains any / empty
-  - Multiselect dropdown: contains any (labels) / empty
-- Result table: one column per selected custom field, **sortable** (`cf_{id}_asc` / `cf_{id}_desc`)
-- Summary pills show field + operator + values (e.g. `Name enthält x`)
+  - Multiselect dropdown: contains any / empty
+- Sortable custom-field columns in the result table
+- Summary pills (field + operator + values)
 
-### Visual redesign
+### UI
 
-- Tile-based filter UI (mailbox, status, assignee, custom fields; folder + advanced under “more options”)
-- Radio/checkbox panels instead of dense selects where helpful
-- Animated “Show more options” section for advanced filters
-- Floating filter panels (`position: fixed`, high z-index) so dropdowns are not clipped
-- Compact status/CF pills on tiles
-- Navbar inline search with portal suggestions (desktop expand / mobile constrained)
-- Dark-theme-friendly styling
+- Tile filter UI (mailbox, status, assignee, custom fields; folder + advanced under “more options”)
+- Radio/checkbox panels for filter choices
+- “Show more options” for advanced filters
+- Floating filter panels
+- Status / custom-field pills on tiles
+- Navbar search with suggestions (desktop and mobile)
+- Dark theme support
 
 ### Bulk actions
 
@@ -71,7 +66,7 @@ Select visible Smart Search results and:
 - Update conversation status
 - Add the same internal note to selected conversations
 
-Bulk actions use POST + CSRF, re-check update policy per conversation, skip deleted/inaccessible items, and limit each request to a configurable maximum.
+POST + CSRF; per-conversation policy checks; skips deleted/inaccessible items; configurable selection limit.
 
 ## Compatibility
 
@@ -92,8 +87,6 @@ You may [install this module like any other FreeScout module](https://github.com
 2. If you previously used `AdamSmartSearchUI`, deactivate/remove that module first.
 3. Activate **Smart Search** under **Manage → Modules**.
 
-FreeScout runs migrations, creates the public symlink, and clears caches on activation — no manual `artisan` commands are required for a normal install.
-
 ## Configuration
 
 Edit `Config/config.php` before deployment when needed:
@@ -104,17 +97,15 @@ Edit `Config/config.php` before deployment when needed:
 - `min_query_len`
 - `per_page`
 - `search_thread_body`
+- `default_statuses`
+- `default_mailbox_id`
 - `bulk_max_selected`
 - `bulk_note_max_length`
 - `schema_cache_minutes`
 
-Settings saved under Manage → Settings use the option keys `smartsearch.*`.
-Previous `adamsmartsearchui.*` options are not migrated automatically — re-save defaults once after upgrading.
-
 ## Updates
 
 FreeScout can update this module via the Modules page (`latestVersionUrl` / `latestVersionZipUrl` in `module.json`).
-Release ZIPs must contain a top-level `SmartSearch/` folder.
 
 ## Security
 

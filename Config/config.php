@@ -18,12 +18,10 @@ return [
     'per_page' => 50,
 
     // Search published customer messages, agent replies, and internal notes.
-    // Overridable via Manage → Settings → Smart Search (Option).
     'search_thread_body' => true,
 
     // Default filters for the form when Smart Search opens idle (no ss=1).
     // Listing (recent/search) runs only after form submit or with an explicit q.
-    // Overridable via Manage → Settings → Smart Search.
     // FreeScout: 1=Active, 2=Pending, 3=Closed, 4=Spam; -10=Deleted (module).
     'default_statuses' => [1, 2],
     'default_mailbox_id' => 0,
