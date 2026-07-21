@@ -2,7 +2,7 @@
   "name": "Smart Search",
   "alias": "smartsearch",
   "description": "Smart Search for FreeScout: tile UI, multi-status OR filters, type-aware custom-field filters, message-content matching, permission-safe filters, deleted-state badges, and page-only bulk actions.",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "detailsUrl": "https://github.com/karrierekick-dev/freescout-smart-search",
   "author": "Karriere Kick (based on AdamCoffeeOverflow)",
   "authorUrl": "https://github.com/karrierekick-dev",
@@ -24,7 +24,7 @@
     "start.php"
   ],
   "requires": [],
-  "img": "/modules/smartsearch/img/freescout-smart-search-logo.png",
+  "img": "https://raw.githubusercontent.com/karrierekick-dev/freescout-smart-search/main/Public/img/freescout-smart-search-logo.png",
   "latestVersionUrl": "https://raw.githubusercontent.com/karrierekick-dev/freescout-smart-search/main/module.json",
   "latestVersionZipUrl": "https://github.com/karrierekick-dev/freescout-smart-search/releases/latest/download/SmartSearch.zip"
 }

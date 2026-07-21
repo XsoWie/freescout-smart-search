@@ -1,6 +1,6 @@
 # Smart Search
 
-Enhanced unified conversation search for FreeScout.
+Enhanced search for FreeScout.
 
 **Version:** 1.1.3  
 **License:** AGPL-3.0  
