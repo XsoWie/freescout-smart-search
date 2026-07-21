@@ -130,9 +130,79 @@ trait ParsesBasicFilters
     }
 
     /**
+     * Allowed relative date presets (resolved to absolute Y-m-d range).
+     *
+     * @return string[]
+     */
+    protected function datePresetKeys()
+    {
+        return [
+            'today',
+            'yesterday',
+            'last_7_days',
+            'last_30_days',
+            'this_month',
+            'last_month',
+        ];
+    }
+
+    /**
+     * Resolve a relative date preset to [date_from, date_to] (Y-m-d).
+     * Empty / unknown preset => ['', ''].
+     *
+     * @return array{0:string,1:string}
+     */
+    protected function resolveDatePreset($preset, Carbon $now = null)
+    {
+        $preset = strtolower(trim((string)$preset));
+        if ($preset === '' || !in_array($preset, $this->datePresetKeys(), true)) {
+            return ['', ''];
+        }
+
+        if (!$now) {
+            $now = Carbon::now();
+        }
+        $today = $now->copy()->startOfDay();
+
+        switch ($preset) {
+            case 'today':
+                $from = $today->copy();
+                $to = $today->copy();
+                break;
+            case 'yesterday':
+                $from = $today->copy()->subDay();
+                $to = $from->copy();
+                break;
+            case 'last_7_days':
+                // Inclusive: today and the previous 6 days.
+                $to = $today->copy();
+                $from = $today->copy()->subDays(6);
+                break;
+            case 'last_30_days':
+                $to = $today->copy();
+                $from = $today->copy()->subDays(29);
+                break;
+            case 'this_month':
+                $from = $today->copy()->startOfMonth();
+                $to = $today->copy();
+                break;
+            case 'last_month':
+                // Carbon 1.x compatible (no subMonthNoOverflow).
+                $from = $today->copy()->startOfMonth()->subMonth();
+                $to = $from->copy()->endOfMonth();
+                break;
+            default:
+                return ['', ''];
+        }
+
+        return [$from->format('Y-m-d'), $to->format('Y-m-d')];
+    }
+
+    /**
      * @param array<int, array{id:int,name:string}> $tags
      * @return array{
      *   date_field:string,
+     *   date_preset:string,
      *   date_from:string,
      *   date_to:string,
      *   tag_ids:int[],
@@ -149,9 +219,18 @@ trait ParsesBasicFilters
             $dateField = 'updated';
         }
 
+        $datePreset = strtolower(trim((string)$request->get('date_preset', '')));
+        if (!in_array($datePreset, $this->datePresetKeys(), true)) {
+            $datePreset = '';
+        }
+
         $dateFrom = $this->normalizeDateInput((string)$request->get('date_from', ''));
         $dateTo = $this->normalizeDateInput((string)$request->get('date_to', ''));
 
+        // Relative preset wins over absolute inputs when set.
+        if ($datePreset !== '') {
+            list($dateFrom, $dateTo) = $this->resolveDatePreset($datePreset);
+        }
         $allowedTagIds = [];
         foreach ($tags as $tag) {
             $allowedTagIds[(int)$tag['id']] = true;
@@ -202,6 +281,7 @@ trait ParsesBasicFilters
 
         return [
             'date_field' => $dateField,
+            'date_preset' => $datePreset,
             'date_from' => $dateFrom,
             'date_to' => $dateTo,
             'tag_ids' => $tagIds,
@@ -231,6 +311,9 @@ trait ParsesBasicFilters
 
     protected function advancedFiltersActive(array $advanced)
     {
+        if (($advanced['date_preset'] ?? '') !== '') {
+            return true;
+        }
         if (($advanced['date_from'] ?? '') !== '' || ($advanced['date_to'] ?? '') !== '') {
             return true;
         }

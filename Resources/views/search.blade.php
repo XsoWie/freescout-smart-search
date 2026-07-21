@@ -42,8 +42,10 @@
                 $sortVal = $sort ?? 'updated_desc';
                 $nextSortId = ($sortVal === 'id_desc') ? 'id_asc' : 'id_desc';
                 $nextSortUpdated = ($sortVal === 'updated_desc') ? 'updated_asc' : 'updated_desc';
+                $nextSortCreated = ($sortVal === 'created_desc') ? 'created_asc' : 'created_desc';
                 $idArrow = ($sortVal === 'id_desc') ? ' ↓' : (($sortVal === 'id_asc') ? ' ↑' : '');
                 $updatedArrow = ($sortVal === 'updated_desc') ? ' ↓' : (($sortVal === 'updated_asc') ? ' ↑' : '');
+                $createdArrow = ($sortVal === 'created_desc') ? ' ↓' : (($sortVal === 'created_asc') ? ' ↑' : '');
                 $bulkNoteMaxLength = max(100, min(100000, (int)config('smartsearch.bulk_note_max_length', 50000)));
             @endphp
 
@@ -169,6 +171,11 @@
                                 @endforeach
                                 <th class="smartsearch-col-status" scope="col">{{ __('Status') }}</th>
                                 <th scope="col">
+                                    <a href="{{ route('smartsearch.search', array_merge($baseSort, ['sort' => $nextSortCreated])) }}">
+                                        {{ __('Created') }}{{ $createdArrow }}
+                                    </a>
+                                </th>
+                                <th scope="col">
                                     <a href="{{ route('smartsearch.search', array_merge($baseSort, ['sort' => $nextSortUpdated])) }}">
                                         {{ __('Updated') }}{{ $updatedArrow }}
                                     </a>
@@ -239,6 +246,7 @@
                                             <span class="label label-{{ $statusClass }}">{{ $statusName }}</span>
                                         @endif
                                     </td>
+                                    <td>{{ !empty($result['created_at']) ? \App\User::dateFormat($result['created_at'], 'Y-m-d H:i') : '' }}</td>
                                     <td>{{ \App\User::dateFormat($result['updated_at'], 'Y-m-d H:i') }}</td>
                                 </tr>
                             @endforeach

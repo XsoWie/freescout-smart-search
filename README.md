@@ -2,7 +2,7 @@
 
 Enhanced unified conversation search for FreeScout.
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **License:** AGPL-3.0  
 **Repository:** [karrierekick-dev/freescout-smart-search](https://github.com/karrierekick-dev/freescout-smart-search)
 
@@ -27,8 +27,11 @@ with additional filters, bulk actions, and UI refinements. License remains AGPL-
   - `1234` prefers the internal conversation ID
   - thread ID lookup remains available as a fallback
   - failed numeric lookups continue into normal text search
-- Filters: mailbox, **multi-status (OR)** incl. Deleted, folder, assignee, sort
-- Advanced filters (collapsible): date range, tags, customer, attachments, search-in scopes, waiting for reply
+- Filters: mailbox, **multi-status (OR)** incl. Deleted, assignee (primary), folder, advanced filters
+- Sorting via results table headers (`#`, Created, Updated, active custom-field columns)
+- Advanced filters (collapsible): date range (relative presets + custom), tags, customer, attachments, search-in scopes, waiting for reply
+- Relative date presets: Today, Yesterday, Last 7/30 days, This month, Last month (resolved server-side for SQL)
+- **Defaults** button restores Manage → Settings defaults (not an empty form); Quick Search shows a filter summary only when filters differ from defaults
 - **Manage → Settings → Smart Search:** default statuses, default mailbox, toggle “search message bodies”
 - **Localization:** FreeScout JSON style (`Resources/lang/de.json`, `fr.json`); English source keys via `__()` / `__j()`
 - Deleted conversations use `conversation.state` and display a red **Deleted** badge
@@ -52,7 +55,7 @@ Shown only when the **Custom Fields** module is installed and active:
 
 ### Visual redesign
 
-- Tile-based filter UI (mailbox, status, custom fields, assignee, folder, sort)
+- Tile-based filter UI (mailbox, status, assignee, custom fields; folder + advanced under “more options”)
 - Radio/checkbox panels instead of dense selects where helpful
 - Animated “Show more options” section for advanced filters
 - Floating filter panels (`position: fixed`, high z-index) so dropdowns are not clipped

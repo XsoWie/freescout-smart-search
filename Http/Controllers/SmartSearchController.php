@@ -310,7 +310,8 @@ class SmartSearchController extends Controller
 
             // Keep it intentionally small and fast.
             $perPage = 8;
-            // Always suggest newest first (deterministic UX).
+            // Same sort family as the full search page (CF-column sorts ignored for speed).
+            $suggestSort = $this->normalizeSort((string)$request->get('sort', 'updated_desc'));
             [$results, $total] = $this->search(
                 $q,
                 $allowedMailboxIds,
@@ -322,7 +323,7 @@ class SmartSearchController extends Controller
                 $assignedOnlyUserId,
                 1,
                 $perPage,
-                'updated_desc',
+                $suggestSort,
                 $advanced
             );
 

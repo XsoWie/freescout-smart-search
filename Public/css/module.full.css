@@ -122,10 +122,9 @@
 
 .smartsearch-suggest-head-row {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: 2px 8px 2px 0;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 4px 12px 2px;
 }
 
 .smartsearch-suggest-head {
@@ -135,14 +134,39 @@
 }
 
 .smartsearch-suggest-filters {
-  margin: 0 12px 4px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  margin-left: auto;
   padding: 0;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.35;
+  color: #344054;
+  text-align: right;
+}
+
+.smartsearch-suggest-filters-label {
+  flex: 0 0 auto;
+  margin-right: 8px;
+  margin-top: 1px;
+  font-weight: 600;
   color: #667085;
-  white-space: nowrap;
+}
+
+.smartsearch-suggest-filters-text {
+  min-width: 0;
+  max-width: min(420px, calc(100% - 72px));
+  color: #344054;
+  white-space: normal;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  word-break: break-word;
 }
 
 .smartsearch-suggest-reset-filters,
@@ -150,9 +174,21 @@
 .smartsearch-suggest-reset-filters:focus,
 .smartsearch-suggest-reset-filters:active {
   flex: 0 0 auto;
-  padding: 2px 8px;
-  font-size: 12px;
+  margin-left: 6px;
+  margin-top: 0;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: #667085;
+  font-size: 18px;
+  line-height: 1;
   text-decoration: none !important;
+  cursor: pointer;
+}
+
+.smartsearch-suggest-reset-filters:hover,
+.smartsearch-suggest-reset-filters:focus {
+  color: #101828;
 }
 
 .smartsearch-suggest-sep {
@@ -368,7 +404,6 @@ body.theme-dark .smartsearch-suggest-item:focus {
     white-space: nowrap;
   }
 }
-
 .smartsearch-results-section[hidden] {
   display: none !important;
 }
@@ -488,23 +523,24 @@ body.theme-dark .smartsearch-results-panel {
 }
 
 @media (max-width: 767px) {
-.smartsearch-results-bar {
-        align-items: stretch;
-        display: block;
-        padding: 10px;
-        }
+  .smartsearch-results-bar {
+    align-items: stretch;
+    display: block;
+    padding: 10px;
+  }
 
-                                                                                                                                                                                                                                                                .smartsearch-results-bar .smartsearch-results-meta {
-                                                                                                                                                                                                                                                                    margin-bottom: 8px;
-                                                                                                                                                                                                                                                                    padding-top: 0;
-                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                .smartsearch-bulk-toolbar {
-                                                                                                                                                                                                                                                                    display: block;
-                                                                                                                                                                                                                                                                }
-                                                                                                                                
-                                                                                                                                                                                                                                                                .smartsearch-bulk-toolbar>* {
-                                                                                                                                                                                                                                                                    display: block;
-                                                                                                                                                                                                                                                                    margin: 0 0 6px;
+  .smartsearch-results-bar .smartsearch-results-meta {
+    margin-bottom: 8px;
+    padding-top: 0;
+  }
+
+  .smartsearch-bulk-toolbar {
+    display: block;
+  }
+
+  .smartsearch-bulk-toolbar > * {
+    display: block;
+    margin: 0 0 6px;
     max-width: none !important;
     width: 100%;
   }
@@ -1399,6 +1435,10 @@ padding: 0 18px;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.smartsearch-date-row-absolute {
+  margin-top: 8px;
 }
 
 .smartsearch-date-row .form-control {

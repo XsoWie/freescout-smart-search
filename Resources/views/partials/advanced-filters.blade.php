@@ -1,6 +1,7 @@
 @php
     $adv = (array)($advanced ?? []);
     $dateField = (string)($adv['date_field'] ?? 'updated');
+    $datePreset = (string)($adv['date_preset'] ?? '');
     $dateFrom = (string)($adv['date_from'] ?? '');
     $dateTo = (string)($adv['date_to'] ?? '');
     $tagIds = array_map('intval', (array)($adv['tag_ids'] ?? []));
@@ -14,12 +15,22 @@
     $tagsList = (array)($tags ?? []);
     $tagsOk = !empty($tagsOk);
 
-    $dateSummary = '';
-    if ($dateFrom !== '' || $dateTo !== '') {
-        $basis = $dateField === 'created' ? __('Created date') : __('Last updated');
+    $datePresetLabels = [
+        'today' => __('Today'),
+        'yesterday' => __('Yesterday'),
+        'last_7_days' => __('Last 7 days'),
+        'last_30_days' => __('Last 30 days'),
+        'this_month' => __('This month'),
+        'last_month' => __('Last month'),
+    ];
+
+    $basis = $dateField === 'created' ? __('Created date') : __('Last updated');
+    if ($datePreset !== '' && isset($datePresetLabels[$datePreset])) {
+        $dateSummary = $basis.': '.$datePresetLabels[$datePreset];
+    } elseif ($dateFrom !== '' || $dateTo !== '') {
         $dateSummary = $basis.': '.($dateFrom !== '' ? $dateFrom : '…').' – '.($dateTo !== '' ? $dateTo : '…');
     } else {
-        $dateSummary = $dateField === 'created' ? __('Created date') : __('Last updated');
+        $dateSummary = __('Any');
     }
 
     $waitingLabel = __('Any');
@@ -59,6 +70,14 @@
                         <option value="updated" @if($dateField === 'updated') selected @endif>{{ __('Last updated') }}</option>
                         <option value="created" @if($dateField === 'created') selected @endif>{{ __('Created date') }}</option>
                     </select>
+                    <select class="form-control input-sm" name="date_preset" title="{{ __('Relative range') }}">
+                        <option value="" @if($datePreset === '') selected @endif>{{ __('Custom range') }}</option>
+                        @foreach ($datePresetLabels as $presetKey => $presetLabel)
+                            <option value="{{ $presetKey }}" @if($datePreset === $presetKey) selected @endif>{{ $presetLabel }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="smartsearch-date-row smartsearch-date-row-absolute">
                     <input type="date" class="form-control input-sm" name="date_from" value="{{ $dateFrom }}" title="{{ __('From') }}">
                     <span class="smartsearch-date-sep">–</span>
                     <input type="date" class="form-control input-sm" name="date_to" value="{{ $dateTo }}" title="{{ __('To') }}">
@@ -183,7 +202,7 @@
                         {{ __('Notes') }}
                     </label>
                 </div>
-                <p class="help-block">{{ __('Limits the main query. All three selected = full search including customers and custom fields.') }}</p>
+                <p class="help-block">{{ __('Applies to the search query. With all three selected, customer name/email/phone and custom-field values are included too. Narrowing the scope searches only the checked areas.') }}</p>
             </div>
         </div>
 

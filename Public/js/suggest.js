@@ -422,7 +422,7 @@
                 if (!hasDefinedFilters(getSearchFormState())) {
                   return false;
                 }
-                var summary = buildFilterSummary(getSearchFormState(), 90);
+                var summary = buildFilterSummary(getSearchFormState(), 220);
                 if (!summary) {
                   return false;
                 }
@@ -435,7 +435,7 @@
 
                 var label = document.createElement('span');
                 label.className = 'smartsearch-suggest-filters-label';
-                appendText(label, I18N.filterPrefix || 'Filter:');
+                appendText(label, I18N.filterPrefix || 'Active filters:');
                 filters.appendChild(label);
                 filters.appendChild(document.createTextNode(' '));
 
@@ -447,8 +447,8 @@
                 var resetBtn = document.createElement('button');
                 resetBtn.type = 'button';
                 resetBtn.className = 'smartsearch-suggest-reset-filters';
-                resetBtn.setAttribute('aria-label', I18N.resetFilters || I18N.reset || 'Reset filters');
-                resetBtn.setAttribute('title', I18N.resetFilters || I18N.reset || 'Reset filters');
+                resetBtn.setAttribute('aria-label', I18N.restoreDefaults || I18N.resetFilters || 'Restore defaults');
+                resetBtn.setAttribute('title', I18N.restoreDefaults || I18N.resetFilters || 'Restore defaults');
                 appendText(resetBtn, '×');
                 // mousedown: avoid input-blur closing the dialog before the action runs.
                 resetBtn.addEventListener('mousedown', function (ev) {
@@ -560,7 +560,9 @@
                       continue;
                     }
                     any = true;
-                    var href = smartUrl + (smartUrl.indexOf('?') >= 0 ? '&' : '?') + 'q=' + encodeURIComponent(q);
+                    var href = (typeof buildSmartSearchUrl === 'function')
+                      ? buildSmartSearchUrl(q, getSearchFormState())
+                      : (smartUrl + (smartUrl.indexOf('?') >= 0 ? '&' : '?') + 'q=' + encodeURIComponent(q));
                     var conv = (hi && hi.kind === 'conv' && hi.conv) ? hi.conv : null;
                     if (conv && conv.url) {
                       var mb = (conv.mailbox_name || '').toString();

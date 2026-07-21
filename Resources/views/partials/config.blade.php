@@ -37,6 +37,17 @@
         $ssStatusLabels = [];
     }
     $ssStatusLabels['-10'] = (string)__('Deleted');
+    $ssMailboxLabels = [];
+    try {
+        $ssUser = \Auth::user();
+        if ($ssUser && method_exists($ssUser, 'mailboxesCanView')) {
+            foreach ($ssUser->mailboxesCanView(true) as $ssMb) {
+                $ssMailboxLabels[(string)$ssMb->id] = (string)$ssMb->name;
+            }
+        }
+    } catch (\Throwable $e) {
+        $ssMailboxLabels = [];
+    }
 @endphp
 <span
     id="smartsearch-config"
@@ -48,8 +59,11 @@
     data-default-statuses="{{ e(json_encode($ssDefaultStatuses)) }}"
     data-default-mailbox-id="{{ $ssDefaultMailboxId }}"
     data-status-labels="{{ e(json_encode($ssStatusLabels, JSON_UNESCAPED_UNICODE)) }}"
+    data-mailbox-labels="{{ e(json_encode($ssMailboxLabels, JSON_UNESCAPED_UNICODE)) }}"
     data-i18n-reset-filters="{{ __('Reset filters') }}"
-    data-i18n-filter-prefix="{{ __('Filter:') }}"
+    data-i18n-restore-defaults="{{ __('Restore defaults') }}"
+    data-i18n-defaults="{{ __('Defaults') }}"
+    data-i18n-filter-prefix="{{ __('Active filters:') }}"
     data-i18n-save="{{ __('Save') }}"
     data-i18n-load="{{ __('Load') }}"
     data-i18n-delete="{{ __('Delete') }}"

@@ -198,8 +198,8 @@ trait HandlesPresets
         if (($filters['customer_q'] ?? '') !== '') {
             $parts[] = __('Customer name or email');
         }
-        if (($filters['date_from'] ?? '') !== '' || ($filters['date_to'] ?? '') !== '') {
-            $parts[] = __('Last updated');
+        if (($filters['date_preset'] ?? '') !== '' || ($filters['date_from'] ?? '') !== '' || ($filters['date_to'] ?? '') !== '') {
+            $parts[] = __('Date range');
         }
         if (($filters['waiting_reply'] ?? '') !== '') {
             $parts[] = __('Waiting for reply (last from customer)');

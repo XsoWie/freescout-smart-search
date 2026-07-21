@@ -68,8 +68,8 @@ class SmartSearchServiceProvider extends ServiceProvider
         \Eventy::addFilter('javascripts', function ($javascripts) {
             if ($this->shouldInjectFrontendAssets()) {
                 $base = \Module::getPublicPath(SMART_SEARCH_MODULE).'/js/';
-                // Order: shared core → form page → topbar suggest → bulk actions.
-                foreach (['core.js', 'form.js', 'suggest-history.js', 'suggest.js', 'bulk.js'] as $file) {
+                // Order: shared core → form page (tiles/advanced/cf/state/presets) → topbar suggest → bulk actions.
+                foreach (['core.js', 'form-tiles.js', 'form-advanced.js', 'form-cf-values.js', 'form-cf.js', 'form-state.js', 'form-presets.js', 'form.js', 'suggest-history.js', 'suggest.js', 'bulk.js'] as $file) {
                     $path = $base.$file;
                     $full = public_path(ltrim($path, '/'));
                     if (is_file($full) && !in_array($path, $javascripts, true)) {
@@ -96,7 +96,15 @@ class SmartSearchServiceProvider extends ServiceProvider
                 "ss_any": "<?php echo __j('Any'); ?>",
                 "ss_reset": "<?php echo __j('Reset'); ?>",
                 "ss_reset_filters": "<?php echo __j('Reset filters'); ?>",
-                "ss_filter_prefix": "<?php echo __j('Filter:'); ?>",
+                "ss_restore_defaults": "<?php echo __j('Restore defaults'); ?>",
+                "ss_defaults": "<?php echo __j('Defaults'); ?>",
+                "ss_filter_prefix": "<?php echo __j('Active filters:'); ?>",
+                "ss_mailbox": "<?php echo __j('Mailbox'); ?>",
+                "ss_assignee": "<?php echo __j('Assignee'); ?>",
+                "ss_folder": "<?php echo __j('Folder'); ?>",
+                "ss_tags": "<?php echo __j('Tags'); ?>",
+                "ss_last_reply": "<?php echo __j('Last reply'); ?>",
+                "ss_attachments": "<?php echo __j('Attachments'); ?>",
                 "ss_save": "<?php echo __j('Save'); ?>",
                 "ss_load": "<?php echo __j('Load'); ?>",
                 "ss_delete": "<?php echo __j('Delete'); ?>",
@@ -133,6 +141,12 @@ class SmartSearchServiceProvider extends ServiceProvider
                 "ss_notes": "<?php echo __j('Notes'); ?>",
                 "ss_last_updated": "<?php echo __j('Last updated'); ?>",
                 "ss_created_date": "<?php echo __j('Created date'); ?>",
+                "ss_date_preset_today": "<?php echo __j('Today'); ?>",
+                "ss_date_preset_yesterday": "<?php echo __j('Yesterday'); ?>",
+                "ss_date_preset_last_7_days": "<?php echo __j('Last 7 days'); ?>",
+                "ss_date_preset_last_30_days": "<?php echo __j('Last 30 days'); ?>",
+                "ss_date_preset_this_month": "<?php echo __j('This month'); ?>",
+                "ss_date_preset_last_month": "<?php echo __j('Last month'); ?>",
                 "ss_inline_placeholder": "<?php echo __j('Search…'); ?>",
                 "ss_focus_search": "<?php echo __j('Focus search'); ?>",
                 "ss_open_smart_search": "<?php echo __j('Open Smart Search'); ?>",

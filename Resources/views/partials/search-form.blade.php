@@ -11,9 +11,9 @@
     $advanced = (array)($advanced ?? []);
     $searchInNow = (array)($advanced['search_in'] ?? ['subject', 'messages', 'notes']);
     sort($searchInNow);
-    $advancedActive = (($advanced['date_from'] ?? '') !== '')
+    $advancedActive = (($advanced['date_preset'] ?? '') !== '')
+        || (($advanced['date_from'] ?? '') !== '')
         || (($advanced['date_to'] ?? '') !== '')
-        || (($advanced['date_field'] ?? 'updated') === 'created')
         || !empty($advanced['tag_ids'])
         || (($advanced['customer_q'] ?? '') !== '')
         || (($advanced['has_attachments'] ?? '') !== '')
@@ -24,9 +24,8 @@
     if (!count($selectedAssignees) && isset($assigneeId) && (int)$assigneeId !== 0) {
         $selectedAssignees = [(int)$assigneeId];
     }
-    $moreOpen = ((int)($folderId ?? 0) !== 0)
-        || count($selectedAssignees) > 0
-        || $advancedActive;
+    // Assignee is a primary tile; only folder + advanced expand "more options".
+    $moreOpen = ((int)($folderId ?? 0) !== 0) || $advancedActive;
     $currentSort = (string)($sort ?? 'updated_desc');
     if ($currentSort === '') {
         $currentSort = 'updated_desc';
@@ -121,8 +120,53 @@
                 </div>
             </div>
 
+            {{-- Assignee (multi-select OR) — primary filter --}}
+            <div class="smartsearch-tile" data-tile="assignee">
+                <button type="button" class="smartsearch-tile-btn" aria-expanded="false">
+                    <span class="smartsearch-tile-icon glyphicon glyphicon-user" aria-hidden="true"></span>
+                    <span class="smartsearch-tile-body">
+                        <span class="smartsearch-tile-label">{{ __('Assignee') }}</span>
+                        <span class="smartsearch-tile-value smartsearch-assignee-pills">
+                            @if (!count($selectedAssignees))
+                                <span class="smartsearch-muted">{{ __('Any assignee') }}</span>
+                            @else
+                                @foreach ($selectedAssignees as $aid)
+                                    @if ((int)$aid === -1)
+                                        <span class="smartsearch-pill">{{ __('Unassigned') }}</span>
+                                    @else
+                                        @php
+                                            $an = '';
+                                            foreach (($assignees ?? []) as $a) {
+                                                if ((int)$a['id'] === (int)$aid) { $an = $a['name']; break; }
+                                            }
+                                        @endphp
+                                        <span class="smartsearch-pill">{{ $an !== '' ? $an : ('#'.$aid) }}</span>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </span>
+                    </span>
+                    <span class="smartsearch-tile-caret glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                </button>
+                <div class="smartsearch-tile-panel" hidden>
+                    <div class="smartsearch-check-list smartsearch-assignee-checks">
+                        <label class="checkbox">
+                            <input type="checkbox" name="assignee_id[]" value="-1" @if(in_array(-1, $selectedAssignees, true)) checked @endif>
+                            {{ __('Unassigned') }}
+                        </label>
+                        @foreach (($assignees ?? []) as $assignee)
+                            <label class="checkbox">
+                                <input type="checkbox" name="assignee_id[]" value="{{ $assignee['id'] }}" @if(in_array((int)$assignee['id'], $selectedAssignees, true)) checked @endif>
+                                {{ $assignee['name'] }}
+                            </label>
+                        @endforeach
+                    </div>
+                    <p class="help-block">{{ __('Select one or more assignees (OR). Leave empty for any assignee.') }}</p>
+                </div>
+            </div>
+
             @if ($cfModuleOk)
-            {{-- Custom Fields: always visible primary filter (same row as Mailbox/Status from 1200px) --}}
+            {{-- Custom Fields: always visible primary filter --}}
             <div class="smartsearch-tile smartsearch-tile-cf" data-tile="fields">
                 <button type="button" class="smartsearch-tile-btn" aria-expanded="false">
                     <span class="smartsearch-tile-icon glyphicon glyphicon-list-alt" aria-hidden="true"></span>
@@ -130,7 +174,7 @@
                         <span class="smartsearch-tile-label">{{ __('Custom Fields') }}</span>
                         <span class="smartsearch-tile-value smartsearch-cf-summary">
                             @if (!count($cfFilters))
-                                <span class="smartsearch-muted">—</span>
+                                <span class="smartsearch-muted">{{ __('Any') }}</span>
                             @else
                                 @foreach ($cfFilters as $cf)
                                     @php
@@ -249,9 +293,9 @@
                             {{ __('Save') }}
                         </button>
                     </div>
-                    <button type="button" class="btn btn-link btn-sm smartsearch-reset" title="{{ __('Reset filters') }}">
+                    <button type="button" class="btn btn-link btn-sm smartsearch-reset" title="{{ __('Restore defaults') }}">
                         <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-                        {{ __('Reset') }}
+                        {{ __('Defaults') }}
                     </button>
                 </div>
                 <div class="smartsearch-preset-save-panel" aria-hidden="true">
@@ -277,51 +321,6 @@
         <div class="smartsearch-more-wrap @if(!$moreOpen) is-collapsed @endif" id="smartsearch-more-wrap" aria-hidden="{{ $moreOpen ? 'false' : 'true' }}">
             <div class="smartsearch-more-anim">
                 <div class="smartsearch-filter-grid smartsearch-more-grid">
-                    {{-- Assignee (multi-select OR) --}}
-                    <div class="smartsearch-tile" data-tile="assignee">
-                        <button type="button" class="smartsearch-tile-btn" aria-expanded="false">
-                            <span class="smartsearch-tile-icon glyphicon glyphicon-user" aria-hidden="true"></span>
-                            <span class="smartsearch-tile-body">
-                                <span class="smartsearch-tile-label">{{ __('Assignee') }}</span>
-                                <span class="smartsearch-tile-value smartsearch-assignee-pills">
-                                    @if (!count($selectedAssignees))
-                                        <span class="smartsearch-muted">{{ __('Any assignee') }}</span>
-                                    @else
-                                        @foreach ($selectedAssignees as $aid)
-                                            @if ((int)$aid === -1)
-                                                <span class="smartsearch-pill">{{ __('Unassigned') }}</span>
-                                            @else
-                                                @php
-                                                    $an = '';
-                                                    foreach (($assignees ?? []) as $a) {
-                                                        if ((int)$a['id'] === (int)$aid) { $an = $a['name']; break; }
-                                                    }
-                                                @endphp
-                                                <span class="smartsearch-pill">{{ $an !== '' ? $an : ('#'.$aid) }}</span>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                </span>
-                            </span>
-                            <span class="smartsearch-tile-caret glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-                        </button>
-                        <div class="smartsearch-tile-panel" hidden>
-                            <div class="smartsearch-check-list smartsearch-assignee-checks">
-                                <label class="checkbox">
-                                    <input type="checkbox" name="assignee_id[]" value="-1" @if(in_array(-1, $selectedAssignees, true)) checked @endif>
-                                    {{ __('Unassigned') }}
-                                </label>
-                                @foreach (($assignees ?? []) as $assignee)
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="assignee_id[]" value="{{ $assignee['id'] }}" @if(in_array((int)$assignee['id'], $selectedAssignees, true)) checked @endif>
-                                        {{ $assignee['name'] }}
-                                    </label>
-                                @endforeach
-                            </div>
-                            <p class="help-block">{{ __('Select one or more assignees (OR). Leave empty for any assignee.') }}</p>
-                        </div>
-                    </div>
-
                     {{-- Folder --}}
                     <div class="smartsearch-tile" data-tile="folder">
                         <button type="button" class="smartsearch-tile-btn" aria-expanded="false">

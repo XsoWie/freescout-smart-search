@@ -68,6 +68,7 @@
             folder_id: '0',
             sort: 'updated_desc',
             date_field: 'updated',
+            date_preset: '',
             date_from: '',
             date_to: '',
             customer_q: '',
@@ -119,6 +120,7 @@
           if (typeof state.folder_id !== 'undefined') params.set('folder_id', String(state.folder_id));
           if (state.sort) params.set('sort', String(state.sort));
           if (state.date_field) params.set('date_field', String(state.date_field));
+          if (state.date_preset) params.set('date_preset', String(state.date_preset));
           if (state.date_from) params.set('date_from', String(state.date_from));
           if (state.date_to) params.set('date_to', String(state.date_to));
           if (state.customer_q) params.set('customer_q', String(state.customer_q));
@@ -206,6 +208,8 @@
           any: langMsg('ss_any', getCfgAttr('data-i18n-any', 'Any')),
           reset: langMsg('ss_reset', getCfgAttr('data-i18n-reset', 'Reset')),
           resetFilters: langMsg('ss_reset_filters', getCfgAttr('data-i18n-reset-filters', 'Reset filters')),
+          restoreDefaults: langMsg('ss_restore_defaults', getCfgAttr('data-i18n-restore-defaults', 'Restore defaults')),
+          defaults: langMsg('ss_defaults', getCfgAttr('data-i18n-defaults', 'Defaults')),
           save: langMsg('ss_save', getCfgAttr('data-i18n-save', 'Save')),
           load: langMsg('ss_load', getCfgAttr('data-i18n-load', 'Load')),
           deleteLabel: langMsg('ss_delete', getCfgAttr('data-i18n-delete', 'Delete')),
@@ -219,13 +223,19 @@
           notes: langMsg('ss_notes', getCfgAttr('data-i18n-notes', 'Notes')),
           lastUpdated: langMsg('ss_last_updated', getCfgAttr('data-i18n-last-updated', 'Last updated')),
           createdDate: langMsg('ss_created_date', getCfgAttr('data-i18n-created-date', 'Created date')),
+          datePresetToday: langMsg('ss_date_preset_today', getCfgAttr('data-i18n-date-preset-today', 'Today')),
+          datePresetYesterday: langMsg('ss_date_preset_yesterday', getCfgAttr('data-i18n-date-preset-yesterday', 'Yesterday')),
+          datePresetLast7Days: langMsg('ss_date_preset_last_7_days', getCfgAttr('data-i18n-date-preset-last-7-days', 'Last 7 days')),
+          datePresetLast30Days: langMsg('ss_date_preset_last_30_days', getCfgAttr('data-i18n-date-preset-last-30-days', 'Last 30 days')),
+          datePresetThisMonth: langMsg('ss_date_preset_this_month', getCfgAttr('data-i18n-date-preset-this-month', 'This month')),
+          datePresetLastMonth: langMsg('ss_date_preset_last_month', getCfgAttr('data-i18n-date-preset-last-month', 'Last month')),
           mailbox: langMsg('ss_mailbox', getCfgAttr('data-i18n-mailbox', 'Mailbox')),
           assignee: langMsg('ss_assignee', getCfgAttr('data-i18n-assignee', 'Assignee')),
           folder: langMsg('ss_folder', getCfgAttr('data-i18n-folder', 'Folder')),
           tags: langMsg('ss_tags', getCfgAttr('data-i18n-tags', 'Tags')),
           lastReply: langMsg('ss_last_reply', getCfgAttr('data-i18n-last-reply', 'Last reply')),
           attachments: langMsg('ss_attachments', getCfgAttr('data-i18n-attachments', 'Attachments')),
-          filterPrefix: langMsg('ss_filter_prefix', getCfgAttr('data-i18n-filter-prefix', 'Filter:'))
+          filterPrefix: langMsg('ss_filter_prefix', getCfgAttr('data-i18n-filter-prefix', 'Active filters:'))
         };
 
         function getCsrfToken() {
@@ -261,31 +271,75 @@
           return text.slice(0, Math.max(0, maxLen - 1)).replace(/\s+\S*$/, '') + '…';
         }
 
-        function getStatusLabelsMap() {
+        function parseCfgJson(attrName, fallback) {
+          var raw = getCfgAttr(attrName, '');
+          if (!raw) return fallback;
           try {
-            var map = JSON.parse(getCfgAttr('data-status-labels', '{}')) || {};
-            return (map && typeof map === 'object') ? map : {};
-          } catch (eLabels) {
-            return {};
+            if (raw.indexOf('&quot;') >= 0 || raw.indexOf('&#') >= 0 || raw.indexOf('&amp;') >= 0) {
+              var ta = document.createElement('textarea');
+              ta.innerHTML = raw;
+              raw = ta.value;
+            }
+            var parsed = JSON.parse(raw);
+            return (parsed && typeof parsed === 'object') ? parsed : fallback;
+          } catch (eParse) {
+            return fallback;
           }
         }
 
+        function getStatusLabelsMap() {
+          return parseCfgJson('data-status-labels', {}) || {};
+        }
+
+        function getMailboxLabelsMap() {
+          return parseCfgJson('data-mailbox-labels', {}) || {};
+        }
+
+        function labelFromMap(map, id, fallback) {
+          if (!map || typeof map !== 'object') return fallback || String(id);
+          var key = String(id);
+          if (typeof map[key] === 'string' && map[key]) return map[key];
+          if (typeof map[id] === 'string' && map[id]) return map[id];
+          return fallback || key;
+        }
+
+        function sameStringSets(a, b) {
+          var aa = (a || []).map(function (v) { return String(v); }).slice().sort();
+          var bb = (b || []).map(function (v) { return String(v); }).slice().sort();
+          if (aa.length !== bb.length) return false;
+          var i;
+          for (i = 0; i < aa.length; i++) {
+            if (aa[i] !== bb[i]) return false;
+          }
+          return true;
+        }
+
+        function isDefaultFormState(state) {
+          var def = getDefaultFormState();
+          state = state || {};
+          if (!sameStringSets(state.status, def.status)) return false;
+          if (String(state.mailbox_id || '0') !== String(def.mailbox_id || '0')) return false;
+          if (normalizeAssigneeIds(state.assignee_id).length) return false;
+          if (String(state.folder_id || '0') !== '0') return false;
+          if ((state.cf_filters || []).length) return false;
+          if ((state.tag_ids || []).length) return false;
+          if (String(state.customer_q || '') !== '') return false;
+          if (String(state.date_preset || '') !== '') return false;
+          if (String(state.date_from || '') !== '' || String(state.date_to || '') !== '') return false;
+          if (String(state.date_field || 'updated') !== 'updated') return false;
+          if (String(state.waiting_reply || '') !== '') return false;
+          if (String(state.has_attachments || '') !== '') return false;
+          var searchIn = state.search_in || [];
+          var defSearch = def.search_in || ['subject', 'messages', 'notes'];
+          if (!sameStringSets(searchIn.length ? searchIn : defSearch, defSearch)) return false;
+          return true;
+        }
+
+        /** True when filters differ from module defaults (idle/reset baseline). */
         function hasDefinedFilters(state) {
           state = state || getSearchFormState();
           if (!state || typeof state !== 'object') return false;
-          if ((state.status || []).length) return true;
-          if (String(state.mailbox_id || '0') !== '0') return true;
-          if (normalizeAssigneeIds(state.assignee_id).length) return true;
-          if (String(state.folder_id || '0') !== '0') return true;
-          if ((state.cf_filters || []).length) return true;
-          if ((state.tag_ids || []).length) return true;
-          if (String(state.customer_q || '') !== '') return true;
-          if (String(state.date_from || '') !== '' || String(state.date_to || '') !== '') return true;
-          if (String(state.waiting_reply || '') !== '') return true;
-          if (String(state.has_attachments || '') !== '') return true;
-          var searchIn = state.search_in || [];
-          if (searchIn.length && searchIn.length < 3) return true;
-          return false;
+          return !isDefaultFormState(state);
         }
 
         function buildFilterSummary(state, maxLen) {
@@ -293,53 +347,92 @@
           if (!state || typeof state !== 'object') return '';
           var parts = [];
           var statusLabels = getStatusLabelsMap();
+          var mailboxLabels = getMailboxLabelsMap();
           var statuses = state.status || [];
           var statusNames = [];
           var si;
           for (si = 0; si < statuses.length; si++) {
-            var code = String(statuses[si]);
-            statusNames.push(statusLabels[code] || code);
+            statusNames.push(labelFromMap(statusLabels, statuses[si], String(statuses[si])));
           }
-          if (statusNames.length) parts.push(statusNames.join(', '));
+          if (Array.isArray(state.status_labels) && state.status_labels.length) {
+            parts.push(state.status_labels.join(', '));
+          } else if (statusNames.length) {
+            parts.push(statusNames.join(', '));
+          } else {
+            var defStatuses = (getDefaultFormState().status || []).map(String);
+            if (!sameStringSets(statuses, defStatuses)) {
+              parts.push(I18N.anyStatus || 'Any status');
+            }
+          }
           if (String(state.mailbox_id || '0') !== '0') {
-            parts.push(I18N.mailbox || 'Mailbox');
+            parts.push(
+              state.mailbox_label
+                || labelFromMap(mailboxLabels, state.mailbox_id, (I18N.mailbox || 'Mailbox'))
+            );
           }
           var assigneeIds = normalizeAssigneeIds(state.assignee_id);
           if (assigneeIds.length) {
-            parts.push(I18N.assignee || 'Assignee');
+            var assigneeLabels = Array.isArray(state.assignee_labels) ? state.assignee_labels : [];
+            if (assigneeLabels.length) {
+              parts.push(assigneeLabels.join(', '));
+            } else {
+              parts.push((I18N.assignee || 'Assignee') + ' (' + assigneeIds.length + ')');
+            }
           }
           if (String(state.folder_id || '0') !== '0') {
-            parts.push(I18N.folder || 'Folder');
+            parts.push(state.folder_label || (I18N.folder || 'Folder'));
           }
           var cfs = state.cf_filters || [];
           if (cfs.length) {
-            var cfBits = [];
             var ci;
             for (ci = 0; ci < cfs.length; ci++) {
               var cf = cfs[ci] || {};
-              var vals = cf.values || [];
+              var fieldName = (cf.name || '').toString().replace(/^\s+|\s+$/g, '');
+              if (!fieldName) fieldName = (I18N.chooseField || 'Field');
+              var valLabels = Array.isArray(cf.value_labels) ? cf.value_labels : [];
+              if (!valLabels.length && Array.isArray(cf.values)) {
+                valLabels = cf.values.filter(function (v) { return String(v || '') !== ''; }).map(String);
+              }
               if (cf.op === 'empty') {
-                cfBits.push('∅');
-              } else if (vals.length) {
-                cfBits.push(vals.join('|'));
+                parts.push(fieldName + ' ' + (I18N.emptyNotSet || '∅'));
+              } else if (valLabels.length) {
+                parts.push(fieldName + '=' + valLabels.join('|'));
+              } else {
+                parts.push(fieldName);
               }
             }
-            parts.push(cfBits.length ? cfBits.join(', ') : String(cfs.length));
           }
           if ((state.tag_ids || []).length) {
-            parts.push(I18N.tags || 'Tags');
+            var tagLabels = Array.isArray(state.tag_labels) ? state.tag_labels : [];
+            parts.push(tagLabels.length ? tagLabels.join(', ') : (I18N.tags || 'Tags'));
           }
           if (String(state.customer_q || '') !== '') {
             parts.push(String(state.customer_q));
           }
-          if (String(state.date_from || '') !== '' || String(state.date_to || '') !== '') {
-            parts.push((state.date_from || '…') + '–' + (state.date_to || '…'));
+          if (String(state.date_preset || '') !== '' || String(state.date_from || '') !== '' || String(state.date_to || '') !== '') {
+            var dateBasis = String(state.date_field || 'updated') === 'created'
+              ? (I18N.createdDate || 'Created')
+              : (I18N.lastUpdated || 'Updated');
+            var presetKey = String(state.date_preset || '');
+            var presetLabels = {
+              today: I18N.datePresetToday || 'Today',
+              yesterday: I18N.datePresetYesterday || 'Yesterday',
+              last_7_days: I18N.datePresetLast7Days || 'Last 7 days',
+              last_30_days: I18N.datePresetLast30Days || 'Last 30 days',
+              this_month: I18N.datePresetThisMonth || 'This month',
+              last_month: I18N.datePresetLastMonth || 'Last month'
+            };
+            if (presetKey && presetLabels[presetKey]) {
+              parts.push(dateBasis + ' ' + presetLabels[presetKey]);
+            } else {
+              parts.push(dateBasis + ' ' + (state.date_from || '…') + '–' + (state.date_to || '…'));
+            }
           }
           if (String(state.waiting_reply || '') !== '') {
-            parts.push(I18N.lastReply || 'Last reply');
+            parts.push(state.waiting_reply_label || (I18N.lastReply || 'Last reply'));
           }
           if (String(state.has_attachments || '') !== '') {
-            parts.push(I18N.attachments || 'Attachments');
+            parts.push(state.has_attachments_label || (I18N.attachments || 'Attachments'));
           }
           var searchIn = state.search_in || [];
           if (searchIn.length && searchIn.length < 3) {
@@ -354,7 +447,7 @@
             }
             if (scopeBits.length) parts.push(scopeBits.join('+'));
           }
-          return truncateSummary(parts.join(' · '), maxLen || 90);
+          return truncateSummary(parts.join(' · '), maxLen || 220);
         }
 
         function formatSearchSmartFor(q) {

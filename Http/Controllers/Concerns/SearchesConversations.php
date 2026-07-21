@@ -90,7 +90,7 @@ trait SearchesConversations
         $rows = [];
         try {
             $rows = DB::select(
-                "SELECT DISTINCT c.id, c.subject, c.status, c.state, c.updated_at, c.mailbox_id
+                "SELECT DISTINCT c.id, c.subject, c.status, c.state, c.created_at, c.updated_at, c.mailbox_id
                  FROM $fromSql
                  WHERE $where
                  ORDER BY $orderBy
@@ -108,6 +108,7 @@ trait SearchesConversations
                 'subject' => (string)$r->subject,
                 'status' => (int)$r->status,
                 'state' => isset($r->state) ? (int)$r->state : 0,
+                'created_at' => (string)($r->created_at ?? ''),
                 'updated_at' => (string)$r->updated_at,
                 'mailbox_id' => (int)$r->mailbox_id,
             ];
@@ -265,7 +266,7 @@ trait SearchesConversations
               $cfFilterSql
               $textSql";
 
-        $sql = "SELECT DISTINCT c.id, c.subject, c.mailbox_id, c.status, c.state, c.updated_at
+        $sql = "SELECT DISTINCT c.id, c.subject, c.mailbox_id, c.status, c.state, c.created_at, c.updated_at
             FROM $fromSql
             WHERE c.mailbox_id IN ($in)
               $filterSql
@@ -381,6 +382,7 @@ trait SearchesConversations
                     'mailbox_id' => (int)$r->mailbox_id,
                     'status' => (int)$r->status,
                     'state' => isset($r->state) ? (int)$r->state : 0,
+                    'created_at' => (string)($r->created_at ?? ''),
                     'updated_at' => (string)$r->updated_at,
                 ];
             }

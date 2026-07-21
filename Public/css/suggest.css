@@ -1,4 +1,4 @@
-/* Smart Search – suggest.css */
+/* Smart Search – suggest / topbar */
 /* Inline navbar placement hotfix: align the custom search LI to the navbar height */
 .navbar-nav > li#smartsearch-inline-li,
 .navbar-nav > li.smartsearch-inline {
@@ -123,7 +123,7 @@
 
 .smartsearch-suggest-head-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
   padding: 4px 12px 2px;
 }
@@ -136,7 +136,7 @@
 
 .smartsearch-suggest-filters {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: flex-end;
   min-width: 0;
   max-width: 100%;
@@ -152,16 +152,22 @@
 .smartsearch-suggest-filters-label {
   flex: 0 0 auto;
   margin-right: 8px;
+  margin-top: 1px;
   font-weight: 600;
   color: #667085;
 }
 
 .smartsearch-suggest-filters-text {
   min-width: 0;
+  max-width: min(420px, calc(100% - 72px));
   color: #344054;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
-  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  word-break: break-word;
 }
 
 .smartsearch-suggest-reset-filters,
@@ -170,6 +176,7 @@
 .smartsearch-suggest-reset-filters:active {
   flex: 0 0 auto;
   margin-left: 6px;
+  margin-top: 0;
   padding: 0 2px;
   border: 0;
   background: transparent;
@@ -322,29 +329,7 @@ body.theme-dark .smartsearch-suggest {
 
 body.dark-mode .smartsearch-suggest-filters,
 body.theme-dark .smartsearch-suggest-filters {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-body.dark-mode .smartsearch-suggest-filters-label,
-body.theme-dark .smartsearch-suggest-filters-label {
   color: rgba(255, 255, 255, 0.55);
-}
-
-body.dark-mode .smartsearch-suggest-filters-text,
-body.theme-dark .smartsearch-suggest-filters-text {
-  color: rgba(255, 255, 255, 0.85);
-}
-
-body.dark-mode .smartsearch-suggest-reset-filters,
-body.theme-dark .smartsearch-suggest-reset-filters {
-  color: rgba(255, 255, 255, 0.55);
-}
-
-body.dark-mode .smartsearch-suggest-reset-filters:hover,
-body.dark-mode .smartsearch-suggest-reset-filters:focus,
-body.theme-dark .smartsearch-suggest-reset-filters:hover,
-body.theme-dark .smartsearch-suggest-reset-filters:focus {
-  color: rgba(255, 255, 255, 0.92);
 }
 
 body.dark-mode .smartsearch-suggest-item,
@@ -421,17 +406,3 @@ body.theme-dark .smartsearch-suggest-item:focus {
   }
 }
 
-.smartsearch-results-section[hidden] {
-  display: none !important;
-}
-
-.smartsearch-results-meta {
-  margin: 15px 0;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-.smartsearch-results-bar .smartsearch-results-meta {
-    margin: 0;
-    flex: 1 1 auto;
-    min-width: 0;

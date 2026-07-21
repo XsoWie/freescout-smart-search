@@ -1,4 +1,62 @@
-/* Smart Search – extras.css */
+/* Smart Search – presets / extras */
+.smartsearch-preset-save,
+.smartsearch-preset-load,
+.smartsearch-preset-save-cancel,
+.smartsearch-cf-add,
+.smartsearch-form .btn-link {
+  border: 0;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+
+.smartsearch-reset,
+.smartsearch-preset-save,
+.smartsearch-preset-load {
+  padding: 2px 0;
+  color: #667085;
+}
+
+.smartsearch-reset:hover,
+.smartsearch-reset:focus,
+.smartsearch-preset-save:hover,
+.smartsearch-preset-save:focus,
+.smartsearch-preset-load:hover,
+.smartsearch-preset-load:focus,
+.smartsearch-preset-save-cancel:hover,
+.smartsearch-preset-save-cancel:focus,
+.smartsearch-cf-add:hover,
+.smartsearch-cf-add:focus,
+.smartsearch-form .btn-link:hover,
+.smartsearch-form .btn-link:focus,
+.smartsearch-form .btn-link:active {
+  color: #344054;
+  text-decoration: none !important;
+}
+
+.smartsearch-reset .glyphicon,
+.smartsearch-preset-save .glyphicon,
+.smartsearch-preset-load .glyphicon {
+  margin-right: 4px;
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+.smartsearch-preset-save-wrap.is-hidden,
+.smartsearch-preset-load-wrap[hidden] {
+  display: none !important;
+}
+
+.smartsearch-preset-save-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+
+.smartsearch-preset-load-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
 
 .smartsearch-preset-load-caret {
   margin-left: 2px;
@@ -245,6 +303,10 @@ padding: 0 18px;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.smartsearch-date-row-absolute {
+  margin-top: 8px;
 }
 
 .smartsearch-date-row .form-control {
